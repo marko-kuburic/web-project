@@ -3,6 +3,8 @@ package acs.uns.ac.rs.webproject.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Shelf implements Serializable {
@@ -16,8 +18,11 @@ public class Shelf implements Serializable {
     @Column(name = "is_primary")
     private Boolean isPrimary;
 
-    @OneToOne(mappedBy = "shelf")
-    private ShelfItem item;
+    @ManyToMany
+    @JoinTable(name = "Shelf&ShelfItems",
+            joinColumns = @JoinColumn(name = "shelf_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
+    private Set<ShelfItem> items = new HashSet<ShelfItem>();
 
     public Long getId() {
         return id;
@@ -43,11 +48,11 @@ public class Shelf implements Serializable {
         isPrimary = primary;
     }
 
-    public ShelfItem getItem() {
-        return item;
+    public Set<ShelfItem> getItems() {
+        return items;
     }
 
-    public void setItem(ShelfItem item) {
-        this.item = item;
+    public void setItems(Set<ShelfItem> items) {
+        this.items = items;
     }
 }

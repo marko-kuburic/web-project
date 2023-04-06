@@ -12,16 +12,14 @@ public class ShelfItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private Shelf shelf;
+    @ManyToMany
+    private Set<Shelf> shelfs = new HashSet<Shelf>();
+
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "bookshelves",
-            joinColumns = @JoinColumn(name = "shelf_item_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
-    private Set<Book> books = new HashSet<>();
+    @OneToOne
+    private Book book;
 
     public Long getId() {
         return id;
@@ -31,12 +29,12 @@ public class ShelfItem implements Serializable {
         this.id = id;
     }
 
-    public Shelf getShelf() {
-        return shelf;
+    public Set<Shelf> getShelfs() {
+        return shelfs;
     }
 
-    public void setShelf(Shelf shelf) {
-        this.shelf = shelf;
+    public void setShelfs(Set<Shelf> shelfs) {
+        this.shelfs = shelfs;
     }
 
     public Set<Review> getReviews() {
@@ -47,11 +45,11 @@ public class ShelfItem implements Serializable {
         this.reviews = reviews;
     }
 
-    public Set<Book> getBooks() {
-        return books;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBooks(Set<Book> books) {
-        this.books = books;
+    public void setBook(Book book) {
+        this.book = book;
     }
 }

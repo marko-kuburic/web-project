@@ -38,10 +38,8 @@ public class Book implements Serializable{
     @Column
     private float rating ;
 
-
-
-    @ManyToMany(mappedBy = "books")
-    private Set<ShelfItem> shelfItems = new HashSet<>();
+    @OneToOne(mappedBy = "book")
+    private ShelfItem item;
 
     public Long getId() {
         return id;

@@ -17,8 +17,8 @@ public class Book implements Serializable{
     @Column
     private String title;
 
-   //@Column
-    // private Image img;
+   // @Column
+   // private Image img;
 
     @Column
     private String isbn;

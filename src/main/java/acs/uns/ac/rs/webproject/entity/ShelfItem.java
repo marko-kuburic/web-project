@@ -12,8 +12,8 @@ public class ShelfItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
-    private Set<Shelf> shelfs = new HashSet<Shelf>();
+    @ManyToMany(mappedBy = "items")
+    private Set<Shelf> shelves = new HashSet<Shelf>();
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
@@ -29,12 +29,12 @@ public class ShelfItem implements Serializable {
         this.id = id;
     }
 
-    public Set<Shelf> getShelfs() {
-        return shelfs;
+    public Set<Shelf> getShelves() {
+        return shelves;
     }
 
-    public void setShelfs(Set<Shelf> shelfs) {
-        this.shelfs = shelfs;
+    public void setShelves(Set<Shelf> shelves) {
+        this.shelves = shelves;
     }
 
     public Set<Review> getReviews() {

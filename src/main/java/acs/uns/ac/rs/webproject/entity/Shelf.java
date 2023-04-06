@@ -19,7 +19,7 @@ public class Shelf implements Serializable {
     private Boolean isPrimary;
 
     @ManyToMany
-    @JoinTable(name = "Shelf&ShelfItems",
+    @JoinTable(name = "shelves_and_items",
             joinColumns = @JoinColumn(name = "shelf_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private Set<ShelfItem> items = new HashSet<ShelfItem>();

@@ -1,13 +1,14 @@
 package acs.uns.ac.rs.webproject.entity;
 
 import jakarta.persistence.*;
-
-import java.awt.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import acs.uns.ac.rs.webproject.entity.Genre;
+
 import java.util.HashSet;
 import java.util.Set;
+
+
 @Entity
 public class Book implements Serializable{
     @Id
@@ -17,8 +18,8 @@ public class Book implements Serializable{
     @Column
     private String title;
 
-   //@Column
-    // private Image img;
+    @Column
+    private String imgPath;
 
     @Column
     private String isbn;
@@ -64,6 +65,10 @@ public class Book implements Serializable{
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public String getImgPath() { return imgPath; }
+
+    public void setImgPath(String img) { this.imgPath = img; }
 
     public LocalDate getReleaseDate() {
         return releaseDate;

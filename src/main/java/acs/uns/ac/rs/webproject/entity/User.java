@@ -37,6 +37,30 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
+    public User() {
+    }
+
+    public User(String name, String surname, String username, String mail, String password, LocalDate birthDate, Role role) {
+        this.name = name;
+        this.surname = surname;
+        this.username = username;
+        this.mail = mail;
+        this.password = password;
+        this.birthDate = birthDate;
+        this.role = role;
+    }
+
+    public User(String name, String surname, String username, String mail, String password, LocalDate birthDate, Role role, Set<Review> reviews) {
+        this.name = name;
+        this.surname = surname;
+        this.username = username;
+        this.mail = mail;
+        this.password = password;
+        this.birthDate = birthDate;
+        this.role = role;
+        this.reviews = reviews;
+    }
+
     public Long getId() {
         return id;
     }

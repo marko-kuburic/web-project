@@ -23,6 +23,26 @@ public class ShelfItem implements Serializable {
     @OneToOne
     private Book book;
 
+    private String title;
+
+    public ShelfItem() {
+    }
+
+    public ShelfItem(Set<Shelf> shelves, Set<Review> reviews, Book book) {
+        this.shelves = shelves;
+        this.reviews = reviews;
+        this.book = book;
+        title = book.getTitle();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Long getId() {
         return id;
     }
@@ -49,6 +69,7 @@ public class ShelfItem implements Serializable {
 
     public void setBook(Book book) {
         this.book = book;
+        this.title = book.getTitle();
     }
 
     @Override

@@ -3,6 +3,7 @@ package acs.uns.ac.rs.webproject.entity;
 import acs.uns.ac.rs.webproject.entity.User;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +19,19 @@ public class Author extends User implements Serializable{
             joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
     private Set<Book> bookSet = new HashSet<>();
+
+    public Author() {
+    }
+
+    public Author(String name, String surname, String username, String mail, String password, LocalDate birthDate, Role role, boolean isActive) {
+        super(name, surname, username, mail, password, birthDate, role);
+        this.isActive = isActive;
+    }
+
+    public Author(String name, String surname, String username, String mail, String password, LocalDate birthDate, Role role, Set<Review> reviews, boolean isActive) {
+        super(name, surname, username, mail, password, birthDate, role, reviews);
+        this.isActive = isActive;
+    }
 
     public boolean isActive() {
         return isActive;

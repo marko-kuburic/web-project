@@ -5,11 +5,18 @@ import java.io.Serializable;
 public class Genre implements Serializable {
     private String genre;
 
+    public Genre() {
+    }
+
+    public Genre(String genre) {
+        this.genre = genre;
+    }
+
     public String getGenre() {
         return genre;
     }
 
-    public void setNaziv(String genre) {
+    public void setGenre(String genre) {
         this.genre = genre;
     }
 

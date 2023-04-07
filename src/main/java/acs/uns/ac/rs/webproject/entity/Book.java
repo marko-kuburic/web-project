@@ -42,6 +42,37 @@ public class Book implements Serializable{
     @OneToOne(mappedBy = "book")
     private ShelfItem item;
 
+    private String genreName;
+
+
+    public Book() {
+    }
+
+    public Book(String title, String imgPath, String isbn, LocalDate releaseDate, int numberOfPages, String description, Genre genre, float rating, ShelfItem item) {
+        this.title = title;
+        this.imgPath = imgPath;
+        this.isbn = isbn;
+        this.releaseDate = releaseDate;
+        this.numberOfPages = numberOfPages;
+        this.description = description;
+        this.genre = genre;
+        this.rating = rating;
+        this.item = item;
+        this.genreName = genre.getGenre();
+    }
+
+    public Book(String title, String imgPath, String isbn, LocalDate releaseDate, int numberOfPages, String description, Genre genre, float rating) {
+        this.title = title;
+        this.imgPath = imgPath;
+        this.isbn = isbn;
+        this.releaseDate = releaseDate;
+        this.numberOfPages = numberOfPages;
+        this.description = description;
+        this.genre = genre;
+        this.rating = rating;
+        this.genreName = genre.getGenre();
+    }
+
     public Long getId() {
         return id;
     }
@@ -100,6 +131,7 @@ public class Book implements Serializable{
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+        this.genreName = genre.getGenre();
     }
     public float getRating() {
         return rating;
@@ -108,6 +140,14 @@ public class Book implements Serializable{
     public void setRating(float rating) {
         this.rating = rating;
     }
+    public ShelfItem getItem() {
+        return item;
+    }
+
+    public void setItem(ShelfItem item) {
+        this.item = item;
+    }
+
 
     @Override
     public String toString() {

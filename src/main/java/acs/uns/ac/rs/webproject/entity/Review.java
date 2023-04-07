@@ -24,6 +24,31 @@ public class Review implements Serializable {
 
     @ManyToOne
     private ShelfItem item;
+
+    private String bookTitle;
+
+
+
+    public Review() {
+    }
+
+    public Review(String rating, String text, LocalDate date) {
+        this.rating = rating;
+        this.text = text;
+        this.date = date;
+    }
+
+    public Review(String rating, String text, LocalDate date, User user, ShelfItem item) {
+        this.rating = rating;
+        this.text = text;
+        this.date = date;
+        this.user = user;
+        this.item = item;
+        this.bookTitle = item.getTitle();
+    }
+
+
+
     public Long getId() {
         return id;
     }
@@ -70,6 +95,14 @@ public class Review implements Serializable {
 
     public void setItem(ShelfItem item) {
         this.item = item;
+        this.bookTitle = item.getTitle();
+    }
+    public String getBookTitle() {
+        return bookTitle;
+    }
+
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
     }
 
     @Override

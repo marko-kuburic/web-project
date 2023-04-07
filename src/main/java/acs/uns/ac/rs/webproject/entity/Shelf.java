@@ -24,6 +24,22 @@ public class Shelf implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private Set<ShelfItem> items = new HashSet<ShelfItem>();
 
+    public Shelf() {
+    }
+
+    public Shelf(String name, Boolean isPrimary) {
+        this.name = name;
+        this.isPrimary = isPrimary;
+    }
+
+    public Shelf(String name, Boolean isPrimary, Set<ShelfItem> items) {
+        this.name = name;
+        this.isPrimary = isPrimary;
+        this.items = items;
+    }
+
+
+
     public Long getId() {
         return id;
     }

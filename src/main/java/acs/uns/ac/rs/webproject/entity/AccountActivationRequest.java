@@ -26,6 +26,19 @@ public class AccountActivationRequest implements Serializable {
     @Column
     private Status status;
 
+    public AccountActivationRequest() {
+
+    }
+
+    public AccountActivationRequest(String mail, String phoneNumber, String message, LocalDate date, Status status) {
+        this.mail = mail;
+        this.phoneNumber = phoneNumber;
+        this.message = message;
+        this.date = date;
+        this.status = status;
+    }
+
+
     public Long getId() {
         return id;
     }
@@ -85,4 +98,6 @@ public class AccountActivationRequest implements Serializable {
                 ", status=" + status +
                 '}';
     }
+
+
 }

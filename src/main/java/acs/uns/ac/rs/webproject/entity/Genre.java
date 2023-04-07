@@ -12,4 +12,9 @@ public class Genre implements Serializable {
     public void setNaziv(String genre) {
         this.genre = genre;
     }
+
+    @Override
+    public String toString() {
+        return " " + genre;
+    }
 }

@@ -35,5 +35,11 @@ public class Author extends User implements Serializable{
         this.bookSet = bookSet;
     }
 
-
+    @Override
+    public String toString() {
+        return "Author{" +
+                super.toString() +
+                "isActive=" + isActive +
+                '}';
+    }
 }

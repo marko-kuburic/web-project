@@ -101,4 +101,16 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", username='" + username + '\'' +
+                ", mail='" + mail + '\'' +
+                ", password='" + password + '\'' +
+                ", birthDate=" + birthDate + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }

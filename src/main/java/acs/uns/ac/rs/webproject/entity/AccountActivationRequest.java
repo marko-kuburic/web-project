@@ -74,5 +74,15 @@ public class AccountActivationRequest implements Serializable {
         this.status = status;
     }
 
-
+    @Override
+    public String toString() {
+        return "AccountActivationRequest{" +
+                "id=" + id +
+                ", mail='" + mail + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", message='" + message + '\'' +
+                ", date=" + date +
+                ", status=" + status +
+                '}';
+    }
 }

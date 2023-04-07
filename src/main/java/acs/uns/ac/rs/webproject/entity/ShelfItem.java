@@ -3,7 +3,9 @@ package acs.uns.ac.rs.webproject.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity (name="shelf_item")
@@ -12,8 +14,8 @@ public class ShelfItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
-    private Set<Shelf> shelfs = new HashSet<Shelf>();
+    @ManyToMany(mappedBy = "items")
+    private Set<Shelf> shelves = new HashSet<Shelf>();
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
@@ -29,13 +31,9 @@ public class ShelfItem implements Serializable {
         this.id = id;
     }
 
-    public Set<Shelf> getShelfs() {
-        return shelfs;
-    }
+    public Set<Shelf> getShelves() { return shelves; }
 
-    public void setShelfs(Set<Shelf> shelfs) {
-        this.shelfs = shelfs;
-    }
+    public void setShelves(Set<Shelf> shelves) { this.shelves = shelves; }
 
     public Set<Review> getReviews() {
         return reviews;
@@ -51,5 +49,12 @@ public class ShelfItem implements Serializable {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    @Override
+    public String toString() {
+        return "ShelfItem{" +
+                ", book=" + book +
+                '}';
     }
 }

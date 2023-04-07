@@ -71,4 +71,14 @@ public class Review implements Serializable {
     public void setItem(ShelfItem item) {
         this.item = item;
     }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "rating='" + rating + '\'' +
+                ", text='" + text + '\'' +
+                ", date=" + date +
+                ", user=" + user +
+                '}';
+    }
 }

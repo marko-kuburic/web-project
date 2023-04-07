@@ -18,7 +18,7 @@ public class Book implements Serializable{
     @Column
     private String title;
 
-    @Column
+    @Column (name = "image_path")
     private String imgPath;
 
     @Column
@@ -107,5 +107,19 @@ public class Book implements Serializable{
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", imgPath='" + imgPath + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", numberOfPages=" + numberOfPages +
+                ", description='" + description + '\'' +
+                ", genre=" + genre +
+                ", rating=" + rating +
+                '}';
     }
 }

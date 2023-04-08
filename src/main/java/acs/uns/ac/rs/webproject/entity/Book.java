@@ -33,7 +33,7 @@ public class Book implements Serializable{
     @Column
     private String description;
 
-    @Column
+    @ManyToOne
     private Genre genre;
 
     @Column

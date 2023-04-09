@@ -24,8 +24,8 @@ public class UserService {
     }
 
     public List<User> findAllByName(String name){return userRepository.findAllByName(name);}
-
     public List<User> findAllBySurname(String surname){return userRepository.findAllBySurname(surname);}
+    public List<User> findAllByUsername(String username){return userRepository.findAllByUsername(username);}
     public List<User> findAll(){ return userRepository.findAll();}
 
     public User save(User user){ return userRepository.save(user);}

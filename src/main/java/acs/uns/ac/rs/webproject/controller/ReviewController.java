@@ -36,9 +36,9 @@ public class  ReviewController {
         List<Review> reviewList = reviewService.findAllByBookTitle(bookTitle);
         return reviewList;
     }
-    @GetMapping("/api/reviews/search/{username}")
-    public List<Review> getAllByUsername(@PathVariable("username") String username){
-        List<Review> reviewList = reviewService.findAllByUsername(username);
+    @GetMapping("/api/reviews/search/{user}")
+    public List<Review> getAllByUser(@PathVariable("user") String user){
+        List<Review> reviewList = reviewService.findAllByUser(user);
         return reviewList;
     }
 

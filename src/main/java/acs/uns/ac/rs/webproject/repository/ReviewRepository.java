@@ -9,5 +9,5 @@ public interface ReviewRepository extends JpaRepository <Review, Long> {
 
     List<Review> findAllByBookTitle(String name);
 
-    List<Review> findAllByUsername(String username);
+    List<Review> findAllByUser(String username);
 }

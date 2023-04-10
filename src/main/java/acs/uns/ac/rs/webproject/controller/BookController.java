@@ -14,11 +14,6 @@ public class  BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/api/")
-    public String welcome() {
-        return "Hello from api!";
-    }
-
     @GetMapping("/api/books")
     public List<Book> getBooks() {
         List<Book> bookList = bookService.findAll();

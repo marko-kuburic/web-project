@@ -14,11 +14,6 @@ public class  ReviewController {
     @Autowired
     private ReviewService reviewService;
 
-    @GetMapping("/api/")
-    public String welcome(){
-        return "Hello from api!";
-    }
-
     @GetMapping("/api/reviews")
     public List<Review> getReviews(){
         List<Review> reviewList = reviewService.findAll();

@@ -21,7 +21,7 @@ public class Book implements Serializable{
     @Column (name = "image_path")
     private String imgPath;
 
-    @Column
+    @Column(unique = true)
     private String isbn;
 
     @Column (name = "release_date")

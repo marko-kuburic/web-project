@@ -48,7 +48,7 @@ public class  BookController {
     @PostMapping("/api/save-book")
     public String saveBook(@RequestBody Book book) {
         this.bookService.save(book);
-        return "Successfully saved an book!";
+        return "Successfully saved a book!";
     }
 
 }

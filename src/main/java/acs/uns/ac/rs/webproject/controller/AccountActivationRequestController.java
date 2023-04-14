@@ -42,7 +42,7 @@ public class  AccountActivationRequestController {
     @PostMapping("/api/save-accountActivationRequest")
     public String saveAccountActivationRequest(@RequestBody AccountActivationRequest accountActivationRequest) {
         this.accountActivationRequestService.save(accountActivationRequest);
-        return "Successfully saved a accountActivationRequest!";
+        return "Successfully saved an accountActivationRequest!";
     }
 
 }

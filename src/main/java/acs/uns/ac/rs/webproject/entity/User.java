@@ -19,10 +19,10 @@ public class User implements Serializable {
     @Column
     private String surname;
 
-    @Column
+    @Column(unique = true)
     private String username;
 
-    @Column
+    @Column(unique = true)
     private String mail;
 
     @Column

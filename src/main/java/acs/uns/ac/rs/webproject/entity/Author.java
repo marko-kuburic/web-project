@@ -11,7 +11,7 @@ import java.util.Set;
 @DiscriminatorValue("1")
 public class Author extends User implements Serializable{
 
-    @Column
+    @Column(name = "is_active")
     private boolean isActive;
 
     @ManyToMany

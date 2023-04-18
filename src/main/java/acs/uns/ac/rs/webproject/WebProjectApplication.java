@@ -1,9 +1,11 @@
 package acs.uns.ac.rs.webproject;
 
+import acs.uns.ac.rs.webproject.entity.AccountActivationRequest;
 import acs.uns.ac.rs.webproject.entity.ShelfItem;
 import acs.uns.ac.rs.webproject.entity.User;
 import acs.uns.ac.rs.webproject.repository.ShelfItemRepository;
 import acs.uns.ac.rs.webproject.repository.UserRepository;
+import acs.uns.ac.rs.webproject.repository.AccountActivationRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,6 +22,9 @@ public class WebProjectApplication implements CommandLineRunner {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private AccountActivationRequestRepository requestRepository;
+
 	@Override
 	public void run(String... args) {
 
@@ -34,6 +39,12 @@ public class WebProjectApplication implements CommandLineRunner {
 
 		for (User u : users){
 			System.out.println(u);
+		}
+
+		List<AccountActivationRequest> requests = this.requestRepository.findAll();
+
+		for ( AccountActivationRequest a : requests){
+			System.out.println(a);
 		}
 	}
 

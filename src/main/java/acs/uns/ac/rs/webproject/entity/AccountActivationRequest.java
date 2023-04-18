@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Entity
+@Entity(name = "account_activation_request")
 public class AccountActivationRequest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +14,7 @@ public class AccountActivationRequest implements Serializable {
     @Column
     private String mail;
 
-    @Column
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     @Column

@@ -2,9 +2,7 @@ package acs.uns.ac.rs.webproject.controller;
 
 
 
-import acs.uns.ac.rs.webproject.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import acs.uns.ac.rs.webproject.entity.Shelf;
 import acs.uns.ac.rs.webproject.service.ShelfService;

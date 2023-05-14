@@ -24,6 +24,7 @@ public class ReviewService {
     }
 
     public List<Review> findAllByBookTitle(String title){return reviewRepository.findAllByBookTitle(title);}
+    public List<Review> findAllByUser(String user){return reviewRepository.findAllByUser(user);}
 
     public List<Review> findAll(){ return reviewRepository.findAll();}
 

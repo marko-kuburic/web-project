@@ -23,7 +23,7 @@ public class GenreService {
         return null;
     }
 
-    public List<Genre> findAllByBookGenre(String genre){return genreRepository.findAllByGenre(genre);}
+    public List<Genre> findAllByGenre(String genre){return genreRepository.findAllByGenre(genre);}
 
     public List<Genre> findAll(){ return genreRepository.findAll();}
 

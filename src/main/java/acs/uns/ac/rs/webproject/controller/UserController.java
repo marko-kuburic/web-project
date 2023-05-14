@@ -3,7 +3,6 @@ package acs.uns.ac.rs.webproject.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import acs.uns.ac.rs.webproject.entity.User;
 import acs.uns.ac.rs.webproject.service.UserService;
@@ -43,7 +42,11 @@ public class  UserController {
         return userList;
     }
 
-
+    @GetMapping("/api/users/search/{username}")
+    public List<User> getAllByUsername(@PathVariable("username") String username){
+        List<User> userList = userService.findAllByUsername(username);
+        return userList;
+    }
 
     @PostMapping("/api/save-user")
     public String saveUser(@RequestBody User user) {

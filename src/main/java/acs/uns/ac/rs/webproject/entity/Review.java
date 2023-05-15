@@ -11,7 +11,7 @@ public class Review implements Serializable {
     private Long id;
 
     @Column
-    private String rating;
+    private double rating;
 
     @Column
     private String text;
@@ -22,7 +22,7 @@ public class Review implements Serializable {
     @ManyToOne
     private User user;
 
-    @ManyToOne
+    @OneToOne
     private ShelfItem item;
 
     private String bookTitle;
@@ -32,13 +32,13 @@ public class Review implements Serializable {
     public Review() {
     }
 
-    public Review(String rating, String text, LocalDate date) {
+    public Review(double rating, String text, LocalDate date) {
         this.rating = rating;
         this.text = text;
         this.date = date;
     }
 
-    public Review(String rating, String text, LocalDate date, User user, ShelfItem item) {
+    public Review(double rating, String text, LocalDate date, User user, ShelfItem item) {
         this.rating = rating;
         this.text = text;
         this.date = date;
@@ -57,11 +57,11 @@ public class Review implements Serializable {
         this.id = id;
     }
 
-    public String getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

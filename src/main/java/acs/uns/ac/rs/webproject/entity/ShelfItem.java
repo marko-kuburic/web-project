@@ -17,8 +17,8 @@ public class ShelfItem implements Serializable {
     @ManyToMany(mappedBy = "items")
     private Set<Shelf> shelves = new HashSet<Shelf>();
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Review> reviews = new HashSet<>();
+    @OneToOne
+    private Review review;
 
     @OneToOne
     private Book book;
@@ -28,9 +28,9 @@ public class ShelfItem implements Serializable {
     public ShelfItem() {
     }
 
-    public ShelfItem(Set<Shelf> shelves, Set<Review> reviews, Book book) {
+    public ShelfItem(Set<Shelf> shelves, Review review, Book book) {
         this.shelves = shelves;
-        this.reviews = reviews;
+        this.review = review;
         this.book = book;
         title = book.getTitle();
     }
@@ -55,12 +55,12 @@ public class ShelfItem implements Serializable {
 
     public void setShelves(Set<Shelf> shelves) { this.shelves = shelves; }
 
-    public Set<Review> getReviews() {
-        return reviews;
+    public Review getReview() {
+        return review;
     }
 
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
+    public void setReview(Review review) {
+        this.review = review;
     }
 
     public Book getBook() {

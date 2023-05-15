@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import acs.uns.ac.rs.webproject.dto.RegisterDto;
+
 @Entity(name = "userr")
 @DiscriminatorColumn(name="user_author", discriminatorType = DiscriminatorType.INTEGER)
 public class User implements Serializable {
@@ -59,6 +61,16 @@ public class User implements Serializable {
         this.birthDate = birthDate;
         this.role = role;
         this.reviews = reviews;
+    }
+
+    public User(RegisterDto rg){
+        this.name = rg.getName();
+        this.surname = rg.getSurname();
+        this.username = rg.getUsername();
+        this.mail = rg.getEmail();
+        this.password = rg.getPassword();
+        this.birthDate = rg.getBirthDate();
+        this.role = Role.READER;
     }
 
     public Long getId() {
@@ -124,6 +136,8 @@ public class User implements Serializable {
     public void setRole(Role role) {
         this.role = role;
     }
+
+
 
     @Override
     public String toString() {

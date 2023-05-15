@@ -30,4 +30,25 @@ public class UserService {
 
     public User save(User user){ return userRepository.save(user);}
 
+    public User login(String username, String password){
+
+        User user = userRepository.getByUsername(username);
+            if(user == null || !user.getPassword().equals(password))
+                return null;
+            return  user;
+
+    }
+
+    public boolean userCheck(String username, String email){
+
+        User user1 = userRepository.getByUsername(username);
+        User user2 = userRepository.getByMail(email);
+        
+        if(user1 == null && user2 == null)
+            return true;
+        return false;
+    }
+
+
+
 }

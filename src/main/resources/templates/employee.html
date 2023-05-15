@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Employees</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" th:href="@{/css/employees.css}"/>
+</head>
+<body>
+<button onclick="location.href = '/logout'">Log out</button>
+<h2 style="text-align:center">Employee Profile</h2>
+<div class="card">
+  <img alt="User" src="/images/user.png"/>
+  <h1 th:text="${employee.firstname}"></h1>
+  <h1 th:text="${employee.lastname}"></h1>
+  <p class="title" th:text="${employee.position}"></p>
+  <br>
+</div>
+<a id="employeeDisplayLink" th:href="${'/employees'}" style="text-align: center;">Back</a>
+
+</body>
+</html>

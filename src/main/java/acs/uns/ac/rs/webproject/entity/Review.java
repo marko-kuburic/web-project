@@ -1,5 +1,6 @@
 package acs.uns.ac.rs.webproject.entity;
 
+import acs.uns.ac.rs.webproject.dto.ReviewDto;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -47,6 +48,12 @@ public class Review implements Serializable {
         this.bookTitle = item.getTitle();
     }
 
+    public Review(ReviewDto reviewDto) {
+
+        this.rating = reviewDto.getRating();
+        this.text = reviewDto.getText();
+        this.date = reviewDto.getDate();
+    }
 
 
     public Long getId() {

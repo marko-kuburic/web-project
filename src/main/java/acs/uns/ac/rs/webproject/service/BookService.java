@@ -23,6 +23,14 @@ public class BookService {
         return null;
     }
 
+    public boolean exists(Long id)
+    {
+        Optional<Book> foundBook = bookRepository.findById(id);
+        if(foundBook.isPresent())
+            return true;
+        return false;
+    }
+
     public List<Book> findAllByName(String title){return bookRepository.findAllByTitle(title);}
     public List<Book> findAllByIsbn(String isbn){return bookRepository.findAllByIsbn(isbn);}
     public List<Book> findAllByGenreName(String genre){return bookRepository.findAllByTitle(genre);}

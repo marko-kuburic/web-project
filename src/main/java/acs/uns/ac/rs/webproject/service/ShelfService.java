@@ -1,5 +1,9 @@
 package acs.uns.ac.rs.webproject.service;
 
+import acs.uns.ac.rs.webproject.entity.Book;
+import acs.uns.ac.rs.webproject.entity.ShelfItem;
+import acs.uns.ac.rs.webproject.entity.User;
+import acs.uns.ac.rs.webproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import acs.uns.ac.rs.webproject.entity.Shelf;
@@ -14,6 +18,8 @@ public class ShelfService {
     @Autowired
     private ShelfRepository shelfRepository;
 
+    private UserService userService;
+
     public Shelf findOne(Long id)
     {
         Optional<Shelf> foundShelf = shelfRepository.findById(id);
@@ -23,10 +29,110 @@ public class ShelfService {
         return null;
     }
 
+    public Shelf findByName(String name) {return shelfRepository.getByName(name);}
     public List<Shelf> findAllByName(String name){return shelfRepository.findAllByName(name);}
 
     public List<Shelf> findAll(){ return shelfRepository.findAll();}
 
-    public Shelf save(Shelf shelf){ return shelfRepository.save(shelf);}
+    public boolean save(Shelf shelf){
+
+        if(exists(shelf.getId()))
+            return false;
+
+        shelfRepository.save(shelf);
+        return true;
+    }
+
+    /*public Shelf addShelf(String name){
+
+        Shelf newShelf = shelfRepository.getByName(name);
+        if(newShelf == null || !newShelf.getName().equals(name))
+            return null;
+        return  newShelf;
+    }*/
+
+    public boolean exists(long id)
+    {
+        return shelfRepository.findById(id)!=null;
+    }
+    public boolean existsShelfName(String name) {
+        return shelfRepository.getByName(name) != null;
+    }
+
+    public User getUser(long id) {
+
+        User user = userService.getById(id);
+        if(user == null || user.getId() != id)
+            return null;
+
+        return user;
+
+    }
+
+    public Shelf createShelf(String name, boolean isPrimary)
+    {
+        Shelf newShelf = new Shelf(name, isPrimary);
+        return newShelf;
+    }
+
+    public boolean isOnShelf(Book book, Shelf shelf)
+    {
+        for(ShelfItem shelfItem: shelf.getItems())
+        {
+            if(shelfItem.getBook() == book)
+                return true;
+        }
+        return false;
+    }
+    public boolean isOnPrimary(Book book)
+    {
+        Shelf read = findByName("Read");
+        Shelf wantToRead = findByName("Want to Read");
+        Shelf currentlyReading = findByName("Currently read");
+
+        return isOnShelf(book, read) || isOnShelf(book, wantToRead) || isOnShelf(book, currentlyReading);
+
+    }
+
+    public boolean addBook(Book book, Shelf shelf)
+    {
+        ShelfItem item = new ShelfItem(null, book);
+
+        return shelf.addItem(item);
+    }
+
+    public boolean removeBook(Book book, Shelf shelf)
+    {
+       if(!isOnShelf(book,shelf))
+           return false;
+
+        for(ShelfItem shelfItem: shelf.getItems())
+        {
+            if(shelfItem.getBook() == book)
+                return shelf.removeItem(shelfItem);
+
+        }
+        return false;
+    }
+
+    public void removeBookFromEverywhere(Book book)
+    {
+        for(Shelf shelf : shelfRepository.findAll())
+        {
+            removeBook(book,shelf);
+        }
+
+    }
+
+
+  /*  public Shelf findOneByShelfItemId(Long itemId)
+    {
+        for(Shelf shelf : shelfRepository.findAll())
+        {
+            for(She)
+        }
+    }*/
+
+
 
 }

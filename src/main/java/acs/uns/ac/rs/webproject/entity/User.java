@@ -39,6 +39,9 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Shelf> shelves = new HashSet<>();
+
     public User() {
     }
 
@@ -62,6 +65,23 @@ public class User implements Serializable {
         this.role = role;
         this.reviews = reviews;
     }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public Set<Shelf> getShelves() {
+        return shelves;
+    }
+
+    public void setShelves(Set<Shelf> shelves) {
+        this.shelves = shelves;
+    }
+
 
     public User(RegisterDto rg){
         this.name = rg.getName();
@@ -137,6 +157,15 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    public void addShelf(Shelf shelf)
+    {
+        this.shelves.add(shelf);
+    }
+
+    public boolean deleteShelf(Shelf shelf)
+    {
+        return this.shelves.remove(shelf);
+    }
 
 
     @Override

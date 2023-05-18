@@ -28,6 +28,11 @@ public class ShelfItem implements Serializable {
     public ShelfItem() {
     }
 
+    public ShelfItem(Review review, Book book) {
+        this.review = review;
+        this.book = book;
+    }
+
     public ShelfItem(Set<Shelf> shelves, Review review, Book book) {
         this.shelves = shelves;
         this.review = review;

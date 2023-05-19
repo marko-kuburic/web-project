@@ -5,7 +5,6 @@ package acs.uns.ac.rs.webproject.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import acs.uns.ac.rs.webproject.entity.User;
-import acs.uns.ac.rs.webproject.service.UserService;
 
 import java.util.List;
 

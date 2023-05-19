@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import acs.uns.ac.rs.webproject.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import acs.uns.ac.rs.webproject.dto.LoginDto;
 import acs.uns.ac.rs.webproject.dto.RegisterDto;

@@ -5,7 +5,6 @@ package acs.uns.ac.rs.webproject.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import acs.uns.ac.rs.webproject.entity.Book;
-import acs.uns.ac.rs.webproject.service.BookService;
 
 import java.util.List;
 

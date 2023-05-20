@@ -2,6 +2,9 @@ package acs.uns.ac.rs.webproject.controller;
 
 
 
+import acs.uns.ac.rs.webproject.dto.AddShelfDto;
+import acs.uns.ac.rs.webproject.dto.DeleteShelfDto;
+import acs.uns.ac.rs.webproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import acs.uns.ac.rs.webproject.entity.Shelf;
@@ -14,7 +17,7 @@ public class  ShelfController {
     @Autowired
     private ShelfService shelfService;
 
-
+    private UserService userService;
     @GetMapping("/api/shelfs")
     public List<Shelf> getShelfs(){
         List<Shelf> shelfList = shelfService.findAll();
@@ -39,4 +42,34 @@ public class  ShelfController {
         return "Successfully saved a shelf!";
     }
 
+    @PostMapping("/add-shelf")
+    public String addShelf(@ModelAttribute AddShelfDto addShelfDto){
+
+        if(addShelfDto.getName().isEmpty())
+            return "fail"; //treba videt sta cemo
+
+        if(shelfService.getUser(addShelfDto.getUserId()) == null)
+        {
+            return "fail"; //treba videt sta cemo
+        }
+
+
+        Shelf shelf = new Shelf(addShelfDto);
+        this.shelfService.save(shelf);
+        this.userService.addShelf(shelf, userService.getById(addShelfDto.getUserId()));
+        return "success"; //treba videti gde ga slat************************
+    }
+
+    @DeleteMapping("/delete-shelf")
+    public void deleteShelf(@ModelAttribute DeleteShelfDto delShelfDto){
+        if(!userService.exists(delShelfDto.getUserID()))
+        {
+            return ;
+        }
+        if(shelfService.isPrimary(delShelfDto.getId()))
+        {
+            return;
+        }
+        userService.deleteShelf(delShelfDto.getId(), delShelfDto.getUserID());
+    }
 }

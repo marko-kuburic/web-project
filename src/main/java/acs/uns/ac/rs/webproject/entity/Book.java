@@ -1,5 +1,6 @@
 package acs.uns.ac.rs.webproject.entity;
 
+import acs.uns.ac.rs.webproject.dto.BookDto;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -71,6 +72,10 @@ public class Book implements Serializable{
         this.genre = genre;
         this.rating = rating;
         this.genreName = genre.getGenre();
+    }
+
+    public Book(BookDto bookDto) {
+
     }
 
     public Long getId() {
@@ -162,4 +167,6 @@ public class Book implements Serializable{
                 ", rating=" + rating +
                 '}';
     }
+
+
 }

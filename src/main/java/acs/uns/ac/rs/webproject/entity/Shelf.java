@@ -1,6 +1,8 @@
 package acs.uns.ac.rs.webproject.entity;
 
+import acs.uns.ac.rs.webproject.dto.AddShelfDto;
 import jakarta.persistence.*;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -18,6 +20,9 @@ public class Shelf implements Serializable {
     @Column(name = "is_primary")
     private Boolean isPrimary;
 
+    @ManyToOne
+    private User user;
+
     @ManyToMany
     @JoinTable(name = "shelves_and_items",
             joinColumns = @JoinColumn(name = "shelf_id", referencedColumnName = "id"),
@@ -30,6 +35,12 @@ public class Shelf implements Serializable {
     public Shelf(String name, Boolean isPrimary) {
         this.name = name;
         this.isPrimary = isPrimary;
+    }
+
+    public Shelf(AddShelfDto addShelfDto)
+    {
+        this.name = addShelfDto.getName();
+        this.isPrimary = addShelfDto.isPrimary();
     }
 
     public Shelf(String name, Boolean isPrimary, Set<ShelfItem> items) {
@@ -70,6 +81,17 @@ public class Shelf implements Serializable {
 
     public void setItems(Set<ShelfItem> items) {
         this.items = items;
+    }
+
+    public boolean addItem(ShelfItem item)
+    {
+        return items.add(item);
+
+    }
+
+    public boolean removeItem(ShelfItem item)
+    {
+       return items.remove(item);
     }
 
     @Override

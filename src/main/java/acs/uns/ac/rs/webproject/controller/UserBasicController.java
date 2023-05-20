@@ -1,15 +1,18 @@
 package acs.uns.ac.rs.webproject.controller;
 
+import acs.uns.ac.rs.webproject.dto.*;
+import acs.uns.ac.rs.webproject.entity.Book;
+import acs.uns.ac.rs.webproject.entity.Shelf;
+import acs.uns.ac.rs.webproject.entity.ShelfItem;
+import acs.uns.ac.rs.webproject.service.BookService;
+import acs.uns.ac.rs.webproject.service.ShelfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import acs.uns.ac.rs.webproject.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import acs.uns.ac.rs.webproject.dto.LoginDto;
-import acs.uns.ac.rs.webproject.dto.RegisterDto;
 import acs.uns.ac.rs.webproject.entity.User;
 
 
@@ -18,6 +21,10 @@ public class UserBasicController {
     
     @Autowired
     private UserService userService;
+
+    private ShelfService shelfService;
+
+    private BookService bookService;
 
     @GetMapping("/home")
     public String home(){
@@ -64,7 +71,21 @@ public class UserBasicController {
         if(!userService.userCheck(registerDto.getUsername(), registerDto.getEmail()))
             return "redirect:/register-form";
 
+        if(!registerDto.getPassword2().equals(registerDto.getPassword()))
+            return "redirect:/register-form";
+
         User user = new User(registerDto);
+
+        Shelf wantToRead = shelfService.createShelf("Want to Read", true);
+        user.addShelf(wantToRead);
+        shelfService.save(wantToRead);
+        Shelf current = shelfService.createShelf("Currently reading", true);
+        user.addShelf(current);
+        shelfService.save(current);
+        Shelf read = shelfService.createShelf("Read", true);
+        user.addShelf(read);
+        shelfService.save(read);
+
         this.userService.save(user);
 
         return "redirect:/home";
@@ -74,4 +95,34 @@ public class UserBasicController {
     public String activation(Model model){
         return "activation.html";
     }
+
+  /*  @PostMapping("/add-shelf-form")  //nez sta ce mi ovo stvarno
+    public String addShelf(Model model){
+        AddShelfDto addShelfDto = new AddShelfDto();
+        model.addAttribute("shelf", addShelfDto);
+        return "register.html"; //treba videt ovo**********************************
+    }*/
+
+    @PutMapping("/updateProfile")
+    public String updateProfile(UserDto userDto)
+    {
+        if(userDto.getMail()!=null || userDto.getPass()!=null)
+            return "redirecet:/update-profile-form";
+
+        userService.updateUser(userDto);
+        return "success";
+    }
+
+    @PostMapping("/update-profile-form")
+    public String updateProfileForm(Model model){
+        UserDto userDto = new UserDto();
+        model.addAttribute("user", userDto);
+        return "pass.html"; //treba videt ovo**********************************
+    }
+
+
+
+
+
+
 }

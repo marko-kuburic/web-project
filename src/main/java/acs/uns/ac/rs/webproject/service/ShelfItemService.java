@@ -1,5 +1,6 @@
 package acs.uns.ac.rs.webproject.service;
 
+import acs.uns.ac.rs.webproject.entity.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import acs.uns.ac.rs.webproject.entity.ShelfItem;
@@ -23,6 +24,9 @@ public class ShelfItemService {
         return null;
     }
 
+    public void addReview(Review review, ShelfItem shelfItem){
+        shelfItem.setReview(review);
+    }
     public List<ShelfItem> findAllByTitle(String title){return shelfItemRepository.findAllByTitle(title);}
 
     public List<ShelfItem> findAll(){ return shelfItemRepository.findAll();}

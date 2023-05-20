@@ -9,19 +9,21 @@ public class RegisterDto {
     private String surname;
     private String username;
     private String password;
+    private String password2;
     private String email;    
     private LocalDate birthDate;
 
     public RegisterDto() {
     }
 
-    public RegisterDto(String name, String surname, String username, String password, String email, LocalDate birthDate) {
+    public RegisterDto(String name, String surname, String username, String password, String password2, String email, LocalDate birthDate) {
         this.name = name;
         this.surname = surname;
         this.username = username;
         this.password = password;
         this.email = email;
         this.birthDate = birthDate;
+        this.password2 = password2;
     }
 
     public String getName() {
@@ -72,4 +74,11 @@ public class RegisterDto {
         this.birthDate = birthDate;
     }
 
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
+    }
 }

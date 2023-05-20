@@ -49,6 +49,10 @@ public class Author extends User implements Serializable{
         this.bookSet = bookSet;
     }
 
+    public boolean addBook(Book book)
+    {
+        return bookSet.add(book);
+    }
     @Override
     public String toString() {
         return "Author{" +

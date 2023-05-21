@@ -1,55 +1,33 @@
-package acs.uns.ac.rs.webproject.entity;
+package acs.uns.ac.rs.webproject.dto;
 
-import jakarta.persistence.*;
-
-import java.io.Serializable;
 import java.time.LocalDate;
 
-import acs.uns.ac.rs.webproject.dto.ActivationDto;
+import acs.uns.ac.rs.webproject.entity.Status;
 
-@Entity(name = "account_activation_request")
-public class AccountActivationRequest implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ActivationDto {
     private Long id;
 
-    @Column
     private String mail;
 
-    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column
     private String message;
 
-    @Column
     private LocalDate date;
 
-    @Column
     private Status status;
 
-    @Column
     private String name;
-
-    @Column
     private String surname;
-
-    @Column
     private String username;
-
-    @Column
     private String password;
-
-    @Column
+    private String password2;   
     private LocalDate birthDate;
 
-    public AccountActivationRequest() {
-
-    }
-
     
-    public AccountActivationRequest(String mail, String phoneNumber, String message, LocalDate date, Status status,
-            String name, String surname, String username, String password, LocalDate birthDate) {
+
+    public ActivationDto(String mail, String phoneNumber, String message, LocalDate date, Status status, String name,
+            String surname, String username, String password, String password2, LocalDate birthDate) {
         this.mail = mail;
         this.phoneNumber = phoneNumber;
         this.message = message;
@@ -59,20 +37,19 @@ public class AccountActivationRequest implements Serializable {
         this.surname = surname;
         this.username = username;
         this.password = password;
+        this.password2 = password2;
         this.birthDate = birthDate;
     }
 
-    public AccountActivationRequest(ActivationDto a) {
-        this.mail = a.getMail();
-        this.phoneNumber = a.getPhoneNumber();
-        this.message = a.getMessage();
-        this.date = a.getDate();
-        this.status = Status.WAITING;
-        this.name = a.getName();
-        this.surname = a.getSurname();
-        this.username = a.getUsername();
-        this.password = a.getPassword();
-        this.birthDate = a.getBirthDate();
+    public ActivationDto() {
+    }
+
+    public ActivationDto(String mail, String phoneNumber, String message, LocalDate date, Status status) {
+        this.mail = mail;
+        this.phoneNumber = phoneNumber;
+        this.message = message;
+        this.date = date;
+        this.status = status;
     }
 
     public Long getId() {
@@ -127,63 +104,48 @@ public class AccountActivationRequest implements Serializable {
         return name;
     }
 
-
     public void setName(String name) {
         this.name = name;
     }
-
 
     public String getSurname() {
         return surname;
     }
 
-
     public void setSurname(String surname) {
         this.surname = surname;
     }
-
 
     public String getUsername() {
         return username;
     }
 
-
     public void setUsername(String username) {
         this.username = username;
     }
-
 
     public String getPassword() {
         return password;
     }
 
-
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
+    }
 
     public LocalDate getBirthDate() {
         return birthDate;
     }
 
-
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
-
-
-    @Override
-    public String toString() {
-        return "AccountActivationRequest{" +
-                "id=" + id +
-                ", mail='" + mail + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", message='" + message + '\'' +
-                ", date=" + date +
-                ", status=" + status +
-                '}';
-    }
-
-
+    
 }

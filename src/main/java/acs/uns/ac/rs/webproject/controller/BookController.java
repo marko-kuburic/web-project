@@ -55,7 +55,7 @@ public class  BookController {
 
     @GetMapping("/api/books/search/{genreName}")
     public List<Book> getAllByGenreName(@PathVariable("genreName") String genreName) {
-        List<Book> bookList = bookService.findAllByIsbn(genreName);
+        List<Book> bookList = bookService.findAllByGenreName(genreName);
         return bookList;
     }
 
@@ -117,6 +117,12 @@ public class  BookController {
         ShelfItem shelfItem = shelfItemService.findOne(bookDto.getShelfItemId());
         Shelf shelf = shelfService.findOne(bookDto.getShelfId());
 
+        //provera da li knjiga ima recenzije pre brisanja
+        List<ShelfItem> items = shelfItemService.findAll();
+        for(int i = 0; i < items.size(); i++)
+            if(!shelfItem.getReview().equals(null))
+                return;
+
         if(shelf.getPrimary())
         {
             shelfService.removeBookFromEverywhere(book);
@@ -134,6 +140,7 @@ public class  BookController {
 
         if(!bookService.exists(bookDto.getId()))
             return "fail"; //treba videt sta cemo
+                           //otom potom
 
         if(!shelfService.exists(bookDto.getShelfId()))
         {

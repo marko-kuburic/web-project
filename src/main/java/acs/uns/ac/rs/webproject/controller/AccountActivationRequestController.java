@@ -45,4 +45,10 @@ public class  AccountActivationRequestController {
         return "Successfully saved an accountActivationRequest!";
     }
 
+    @PutMapping("api/update-accountActivationRequest")
+    public String updateAccountActivationRequest(@RequestBody AccountActivationRequest accountActivationRequest) {
+        this.accountActivationRequestService.save(accountActivationRequest);
+        return "Successfully saved an accountActivationRequest!";
+    }
+
 }

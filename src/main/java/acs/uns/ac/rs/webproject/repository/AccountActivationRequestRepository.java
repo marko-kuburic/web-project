@@ -11,4 +11,6 @@ public interface AccountActivationRequestRepository extends JpaRepository <Accou
     List<AccountActivationRequest> findAllByMail(String mail);
 
     List<AccountActivationRequest> findAllByPhoneNumber(String mail);
+
+    AccountActivationRequest findById(long id);
 }

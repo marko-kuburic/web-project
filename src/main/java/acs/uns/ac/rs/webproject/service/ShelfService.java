@@ -36,7 +36,7 @@ public class ShelfService {
 
     public boolean save(Shelf shelf){
 
-        if(exists(shelf.getId()))
+        if(existsShelfName(shelf.getName()))
             return false;
 
         shelfRepository.save(shelf);
@@ -51,10 +51,11 @@ public class ShelfService {
         return  newShelf;
     }*/
 
-    public boolean exists(long id)
+    public boolean exists(Long id)
     {
         return shelfRepository.findById(id)!=null;
     }
+
     public boolean existsShelfName(String name) {
         return shelfRepository.getByName(name) != null;
     }

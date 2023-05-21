@@ -1,9 +1,11 @@
 package acs.uns.ac.rs.webproject.controller;
 
 import acs.uns.ac.rs.webproject.dto.*;
+import acs.uns.ac.rs.webproject.entity.AccountActivationRequest;
 import acs.uns.ac.rs.webproject.entity.Book;
 import acs.uns.ac.rs.webproject.entity.Shelf;
 import acs.uns.ac.rs.webproject.entity.ShelfItem;
+import acs.uns.ac.rs.webproject.service.AccountActivationRequestService;
 import acs.uns.ac.rs.webproject.service.BookService;
 import acs.uns.ac.rs.webproject.service.ShelfService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,14 @@ public class UserBasicController {
     @Autowired
     private UserService userService;
 
+    @Autowired
     private ShelfService shelfService;
 
+    @Autowired
     private BookService bookService;
+
+    @Autowired
+    private AccountActivationRequestService acctivationService;
 
     @GetMapping("/home")
     public String home(){
@@ -34,6 +41,12 @@ public class UserBasicController {
     @GetMapping("/")
     public String root(){
         return "redirect:/home";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/login-form";
     }
 
     @GetMapping("/login-form")
@@ -65,7 +78,7 @@ public class UserBasicController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute RegisterDto registerDto){
-        if(registerDto.getUsername().isEmpty() || registerDto.getPassword().isEmpty() || registerDto.getEmail().isEmpty() || registerDto.getName().isEmpty() || registerDto.getUsername().isEmpty())
+        if(registerDto.getUsername().isEmpty() || registerDto.getPassword().isEmpty() || registerDto.getEmail().isEmpty() || registerDto.getName().isEmpty() || registerDto.getSurname().isEmpty())
             return "redirect:/register-form";
 
         if(!userService.userCheck(registerDto.getUsername(), registerDto.getEmail()))
@@ -76,23 +89,25 @@ public class UserBasicController {
 
         User user = new User(registerDto);
 
-        Shelf wantToRead = shelfService.createShelf("Want to Read", true);
+        Shelf wantToRead = this.shelfService.createShelf("Want to Read", true);
         user.addShelf(wantToRead);
-        shelfService.save(wantToRead);
-        Shelf current = shelfService.createShelf("Currently reading", true);
+        this.shelfService.save(wantToRead);
+        Shelf current = this.shelfService.createShelf("Currently reading", true);
         user.addShelf(current);
-        shelfService.save(current);
-        Shelf read = shelfService.createShelf("Read", true);
+        this.shelfService.save(current);
+        Shelf read = this.shelfService.createShelf("Read", true);
         user.addShelf(read);
-        shelfService.save(read);
+        this.shelfService.save(read);
 
         this.userService.save(user);
 
         return "redirect:/home";
     }
 
-    @GetMapping("/register/author")
+    @GetMapping("/register-form/author-activation-form")
     public String activation(Model model){
+        ActivationDto activationDto = new ActivationDto();
+        model.addAttribute("activation", activationDto);
         return "activation.html";
     }
 
@@ -103,7 +118,7 @@ public class UserBasicController {
         return "register.html"; //treba videt ovo**********************************
     }*/
 
-    @PutMapping("/updateProfile")
+    @PutMapping("/update-rofile")
     public String updateProfile(UserDto userDto)
     {
         if(userDto.getMail()!=null || userDto.getPass()!=null)
@@ -120,8 +135,22 @@ public class UserBasicController {
         return "pass.html"; //treba videt ovo**********************************
     }
 
+    @PostMapping("/author-request")
+    public String activation(@ModelAttribute ActivationDto activationDto){
+        if(activationDto.getMail().isEmpty() || activationDto.getPhoneNumber().isEmpty() || activationDto.getUsername().isEmpty() || activationDto.getPassword().isEmpty() || activationDto.getName().isEmpty() || activationDto.getSurname().isEmpty())
+            return "redirect:/register-form/activation-form";
+        
+        AccountActivationRequest request = new AccountActivationRequest(activationDto);
+        this.acctivationService.save(request);
+        return "redirect:/home";
+    }
 
 
+
+
+
+
+    
 
 
 

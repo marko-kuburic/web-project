@@ -3,6 +3,7 @@ package acs.uns.ac.rs.webproject.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import acs.uns.ac.rs.webproject.entity.AccountActivationRequest;
+import acs.uns.ac.rs.webproject.entity.Status;
 import acs.uns.ac.rs.webproject.repository.AccountActivationRequestRepository;
 
 import java.util.List;
@@ -30,4 +31,7 @@ public class AccountActivationRequestService {
 
     public AccountActivationRequest save(AccountActivationRequest accountActivationRequest){ return accountActivationRequestRepository.save(accountActivationRequest);}
 
+    public void updateAccountActivationRequest(long id, Status st){
+        accountActivationRequestRepository.findById(id).setStatus(st);
+    }
 }

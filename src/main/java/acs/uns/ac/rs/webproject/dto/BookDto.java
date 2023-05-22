@@ -39,6 +39,7 @@ public class BookDto {
     }
 
     long shelfItemId;
+    
     public BookDto() {
     }
 

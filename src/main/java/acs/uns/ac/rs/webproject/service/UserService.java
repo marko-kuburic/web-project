@@ -22,7 +22,7 @@ public class UserService {
     private ShelfService shelfservice;
 
     public User findOne(Long id) {
-        Optional<User> foundUser = userRepository.findById(id);
+        Optional<User> foundUser = this.userRepository.findById(id);
         if (foundUser.isPresent())
             return foundUser.get();
 

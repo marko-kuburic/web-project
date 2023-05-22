@@ -41,19 +41,19 @@ public class  BookController {
         return book;
     }
 
-    @GetMapping("/api/books/search/{name}")
+    @GetMapping("/api/books/search1/{name}")
     public List<Book> getAllByName(@PathVariable("name") String name) {
         List<Book> bookList = bookService.findAllByName(name);
         return bookList;
     }
 
-    @GetMapping("/api/books/search/{isbn}")
+    @GetMapping("/api/books/search2/{isbn}")
     public List<Book> getAllByIsbn(@PathVariable("isbn") String isbn) {
-        List<Book> bookList = bookService.findAllByIsbn(isbn);
+        List<Book> bookList = this.bookService.findAllByIsbn(isbn);
         return bookList;
     }
 
-    @GetMapping("/api/books/search/{genreName}")
+    @GetMapping("/api/books/search3/{genreName}")
     public List<Book> getAllByGenreName(@PathVariable("genreName") String genreName) {
         List<Book> bookList = bookService.findAllByGenreName(genreName);
         return bookList;

@@ -65,7 +65,7 @@ public class UserBasicController {
         if (employee == null)
             return "redirect:/login-form";
 
-        session.setAttribute("employee", employee);
+        session.setAttribute("user", employee);
         return "redirect:/home";
     }
 

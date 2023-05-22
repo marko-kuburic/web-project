@@ -26,7 +26,9 @@ import java.util.List;
 public class  UserController {
     @Autowired
     private UserService userService;
+    @Autowired
     private AccountActivationRequestService activationService;
+    @Autowired
     private ShelfService shelfService;
 
     @GetMapping("/api/")
@@ -51,13 +53,13 @@ public class  UserController {
         List<User> userList = userService.findAllByName(name);
         return userList;
     }
-    @GetMapping("/api/users/search/{surname}")
+    @GetMapping("/api/users/search1/{surname}")
     public List<User> getAllBySurname(@PathVariable("surname") String surname){
         List<User> userList = userService.findAllBySurname(surname);
         return userList;
     }
 
-    @GetMapping("/api/users/search/{username}")
+    @GetMapping("/api/users/search2/{username}")
     public List<User> getAllByUsername(@PathVariable("username") String username){
         List<User> userList = userService.findAllByUsername(username);
         return userList;
@@ -72,9 +74,9 @@ public class  UserController {
 
     @PostMapping("api/logout")
     public ResponseEntity Logout(HttpSession session){
-        User loggedEmployee = (User) session.getAttribute("employee");
+        User loggedUser = (User) session.getAttribute("user");
 
-        if (loggedEmployee == null)
+        if (loggedUser == null)
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
 
         session.invalidate();
@@ -87,11 +89,11 @@ public class  UserController {
         if(loginDto.getUsername().isEmpty() || loginDto.getPassword().isEmpty())
             return new ResponseEntity("Invalid login data", HttpStatus.BAD_REQUEST);
 
-        User loggedEmployee = userService.login(loginDto.getUsername(), loginDto.getPassword());
-        if (loggedEmployee == null)
+        User loggedUser = userService.login(loginDto.getUsername(), loginDto.getPassword());
+        if (loggedUser == null)
             return new ResponseEntity<>("User does not exist!", HttpStatus.NOT_FOUND);
 
-        session.setAttribute("employee", loggedEmployee);
+        session.setAttribute("user", loggedUser);
         return ResponseEntity.ok("Successfully logged in!");
     }
 
@@ -105,7 +107,7 @@ public class  UserController {
         if(loggedUser.getRole() != Role.ADMIN)
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
         
-        AccountActivationRequest acc = activationService.findOne(id);
+        AccountActivationRequest acc = this.activationService.findOne(id);
 
         User user = new User(acc.getName(), acc.getSurname(), acc.getUsername(), acc.getMail(), acc.getPassword(), acc.getBirthDate(), Role.AUTHOR);
 
@@ -121,7 +123,7 @@ public class  UserController {
 
         this.userService.save(user);
 
-        activationService.updateAccountActivationRequest(id, Status.APPROVED);
+        this.activationService.updateAccountActivationRequest(id, Status.APPROVED);
 
 
         return new ResponseEntity("Successfully aprooved", HttpStatus.OK);
@@ -139,7 +141,7 @@ public class  UserController {
 
         AccountActivationRequest acc = activationService.findOne(id);
 
-        activationService.updateAccountActivationRequest(id, Status.REJECTED);
+        this.activationService.updateAccountActivationRequest(id, Status.REJECTED);
 
 
         return new ResponseEntity("Successfully rejected", HttpStatus.OK);

@@ -26,12 +26,12 @@ public class  ReviewController {
         return review;
     }
 
-    @GetMapping("/api/reviews/search/{bookTitle}")
+    @GetMapping("/api/reviews/search1/{bookTitle}")
     public List<Review> getAllByBookTitle(@PathVariable("bookTitle") String bookTitle){
         List<Review> reviewList = reviewService.findAllByBookTitle(bookTitle);
         return reviewList;
     }
-    @GetMapping("/api/reviews/search/{user}")
+    @GetMapping("/api/reviews/search2/{user}")
     public List<Review> getAllByUser(@PathVariable("user") String user){
         List<Review> reviewList = reviewService.findAllByUser(user);
         return reviewList;

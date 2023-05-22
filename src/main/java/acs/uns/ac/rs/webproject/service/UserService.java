@@ -30,11 +30,11 @@ public class UserService {
     }
 
     public List<User> findAllByName(String name) {
-        return userRepository.findAllByName(name);
+        return userRepository.findByName(name);
     }
 
     public List<User> findAllBySurname(String surname) {
-        return userRepository.findAllBySurname(surname);
+        return userRepository.findBySurname(surname);
     }
 
     public List<User> findAllByUsername(String username) {

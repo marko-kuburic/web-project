@@ -5,17 +5,21 @@ package acs.uns.ac.rs.webproject.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import acs.uns.ac.rs.webproject.dto.LoginDto;
 import acs.uns.ac.rs.webproject.entity.AccountActivationRequest;
+import acs.uns.ac.rs.webproject.entity.Author;
 import acs.uns.ac.rs.webproject.entity.Role;
 import acs.uns.ac.rs.webproject.entity.Shelf;
 import acs.uns.ac.rs.webproject.entity.Status;
 import acs.uns.ac.rs.webproject.entity.User;
 import acs.uns.ac.rs.webproject.repository.AccountActivationRequestRepository;
+import acs.uns.ac.rs.webproject.repository.UserRepository;
 import acs.uns.ac.rs.webproject.service.AccountActivationRequestService;
+import acs.uns.ac.rs.webproject.service.AuthorService;
 import acs.uns.ac.rs.webproject.service.ShelfService;
 import acs.uns.ac.rs.webproject.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +34,11 @@ public class  UserController {
     private AccountActivationRequestService activationService;
     @Autowired
     private ShelfService shelfService;
+    @Autowired
+    private AuthorService authorService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/api/")
     public String welcome(){
@@ -50,13 +59,13 @@ public class  UserController {
 
     @GetMapping("/api/users/search/{name}")
     public List<User> getAllByName(@PathVariable("name") String name){
+
         List<User> userList = userService.findAllByName(name);
         return userList;
     }
-    @GetMapping("/api/users/search1/{surname}")
-    public List<User> getAllBySurname(@PathVariable("surname") String surname){
-        List<User> userList = userService.findAllBySurname(surname);
-        return userList;
+    @GetMapping("/api/users/search1/surname")
+    public ResponseEntity<List<User>> getAllBySurname(@RequestParam String surname){
+        return new ResponseEntity<List<User>>(userRepository.findBySurname(surname), HttpStatus.OK);
     }
 
     @GetMapping("/api/users/search2/{username}")
@@ -109,21 +118,23 @@ public class  UserController {
         
         AccountActivationRequest acc = this.activationService.findOne(id);
 
-        User user = new User(acc.getName(), acc.getSurname(), acc.getUsername(), acc.getMail(), acc.getPassword(), acc.getBirthDate(), Role.AUTHOR);
+        Author author = new Author(acc.getName(), acc.getSurname(), acc.getUsername(), acc.getMail(), acc.getPassword(), acc.getBirthDate(), Role.AUTHOR, true);
 
         Shelf wantToRead = this.shelfService.createShelf("Want to Read", true);
-        user.addShelf(wantToRead);
+        author.addShelf(wantToRead);
         this.shelfService.save(wantToRead);
         Shelf current = this.shelfService.createShelf("Currently reading", true);
-        user.addShelf(current);
+        author.addShelf(current);
         this.shelfService.save(current);
         Shelf read = this.shelfService.createShelf("Read", true);
-        user.addShelf(read);
+        author.addShelf(read);
         this.shelfService.save(read);
 
-        this.userService.save(user);
+        this.authorService.save(author);
 
-        this.activationService.updateAccountActivationRequest(id, Status.APPROVED);
+        acc.setStatus(Status.APPROVED);
+
+        this.activationService.save(acc);
 
 
         return new ResponseEntity("Successfully aprooved", HttpStatus.OK);
@@ -141,8 +152,9 @@ public class  UserController {
 
         AccountActivationRequest acc = activationService.findOne(id);
 
-        this.activationService.updateAccountActivationRequest(id, Status.REJECTED);
+        acc.setStatus(Status.REJECTED);
 
+        this.activationService.save(acc);
 
         return new ResponseEntity("Successfully rejected", HttpStatus.OK);
     }

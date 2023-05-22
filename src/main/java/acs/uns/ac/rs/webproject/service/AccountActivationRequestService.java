@@ -31,8 +31,5 @@ public class AccountActivationRequestService {
     public List<AccountActivationRequest> findAll(){ return accountActivationRequestRepository.findAll();}
 
     public AccountActivationRequest save(AccountActivationRequest accountActivationRequest){ return accountActivationRequestRepository.save(accountActivationRequest);}
-
-    public void updateAccountActivationRequest(long id, Status st){
-        accountActivationRequestRepository.findById(id).setStatus(st);
-    }
+    
 }

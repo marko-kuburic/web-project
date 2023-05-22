@@ -104,7 +104,7 @@ public class UserBasicController {
         return "redirect:/home";
     }
 
-    @GetMapping("/register-form/author-activation-form")
+    @GetMapping("/author-activation-form")
     public String activation(Model model){
         ActivationDto activationDto = new ActivationDto();
         model.addAttribute("activation", activationDto);
@@ -139,19 +139,17 @@ public class UserBasicController {
     public String activation(@ModelAttribute ActivationDto activationDto){
         if(activationDto.getMail().isEmpty() || activationDto.getPhoneNumber().isEmpty() || activationDto.getUsername().isEmpty() || activationDto.getPassword().isEmpty() || activationDto.getName().isEmpty() || activationDto.getSurname().isEmpty())
             return "redirect:/register-form/activation-form";
+
+        if(!userService.userCheck(activationDto.getUsername(), activationDto.getMail()))
+            return "redirect:/register-form";
+
+        if(!activationDto.getPassword2().equals(activationDto.getPassword()))
+            return "redirect:/register-form";
         
         AccountActivationRequest request = new AccountActivationRequest(activationDto);
+        System.out.print(request);
         this.acctivationService.save(request);
         return "redirect:/home";
     }
-
-
-
-
-
-
-    
-
-
 
 }

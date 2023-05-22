@@ -104,9 +104,8 @@ public class  UserController {
 
         if(loggedUser.getRole() != Role.ADMIN)
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
-
+        
         AccountActivationRequest acc = activationService.findOne(id);
-        acc.setStatus(Status.APPROVED);
 
         User user = new User(acc.getName(), acc.getSurname(), acc.getUsername(), acc.getMail(), acc.getPassword(), acc.getBirthDate(), Role.AUTHOR);
 
@@ -129,7 +128,7 @@ public class  UserController {
     }
 
     @PutMapping("/api/reject/{id}")
-    public ResponseEntity approve(@PathVariable(name = "id") Long id, HttpSession session){
+    public ResponseEntity reject(@PathVariable(name = "id") Long id, HttpSession session){
         User loggedUser = (User) session.getAttribute("user");
 
         if(loggedUser == null)
@@ -139,9 +138,8 @@ public class  UserController {
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
 
         AccountActivationRequest acc = activationService.findOne(id);
-        acc.setStatus(Status.REJECTED);
 
-        activationService.updateAccountActivationRequest(id, Status.APPROVED);
+        activationService.updateAccountActivationRequest(id, Status.REJECTED);
 
 
         return new ResponseEntity("Successfully rejected", HttpStatus.OK);

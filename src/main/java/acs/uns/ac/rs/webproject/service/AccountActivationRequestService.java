@@ -18,6 +18,7 @@ public class AccountActivationRequestService {
     public AccountActivationRequest findOne(Long id)
     {
         Optional<AccountActivationRequest> foundAccountActivationRequest = accountActivationRequestRepository.findById(id);
+        System.out.println(foundAccountActivationRequest.get());
         if (foundAccountActivationRequest.isPresent())
             return foundAccountActivationRequest.get();
 

@@ -2,6 +2,9 @@ package acs.uns.ac.rs.webproject.controller;
 
 
 
+import acs.uns.ac.rs.webproject.dto.BookDto;
+import acs.uns.ac.rs.webproject.dto.UserDto;
+import acs.uns.ac.rs.webproject.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
@@ -10,12 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import acs.uns.ac.rs.webproject.dto.LoginDto;
-import acs.uns.ac.rs.webproject.entity.AccountActivationRequest;
-import acs.uns.ac.rs.webproject.entity.Author;
-import acs.uns.ac.rs.webproject.entity.Role;
-import acs.uns.ac.rs.webproject.entity.Shelf;
-import acs.uns.ac.rs.webproject.entity.Status;
-import acs.uns.ac.rs.webproject.entity.User;
 import acs.uns.ac.rs.webproject.repository.AccountActivationRequestRepository;
 import acs.uns.ac.rs.webproject.repository.UserRepository;
 import acs.uns.ac.rs.webproject.service.AccountActivationRequestService;
@@ -24,6 +21,7 @@ import acs.uns.ac.rs.webproject.service.ShelfService;
 import acs.uns.ac.rs.webproject.service.UserService;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -46,32 +44,68 @@ public class  UserController {
     }
 
     @GetMapping("/api/users")
-    public List<User> getUsers(){
+    public ResponseEntity<List<UserDto>> getUsers(){
         List<User> userList = userService.findAll();
-        return userList;
+        List<UserDto> userDtos = new ArrayList<UserDto>();
+        for(User user : userList)
+        {
+            UserDto userDto = new UserDto(user);
+            userDtos.add(userDto);
+        }
+        if(userList.size() == 0)
+            return new ResponseEntity(userDtos, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(userDtos, HttpStatus.OK);
     }
 
     @GetMapping("/api/users/{id}")
-    public User getUser(@PathVariable(name = "id") Long id){
+    public ResponseEntity<User> getUser(@PathVariable(name = "id") Long id){
         User user = userService.findOne(id);
-        return user;
+        if(user==null)
+            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        UserDto userDto = new UserDto(user);
+        return new ResponseEntity(userDto, HttpStatus.OK);
     }
 
     @GetMapping("/api/users/search/{name}")
-    public List<User> getAllByName(@PathVariable("name") String name){
+    public ResponseEntity<List<UserDto>> getAllByName(@PathVariable("name") String name){
 
         List<User> userList = userService.findAllByName(name);
-        return userList;
+        List<UserDto> userDtos = new ArrayList<UserDto>();
+        for(User user : userList)
+        {
+            UserDto userDto = new UserDto(user);
+            userDtos.add(userDto);
+        }
+        if(userList.size() == 0)
+            return new ResponseEntity(userDtos, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(userDtos, HttpStatus.OK);
     }
-    @GetMapping("/api/users/search1/surname")
-    public ResponseEntity<List<User>> getAllBySurname(@RequestParam String surname){
-        return new ResponseEntity<List<User>>(userRepository.findBySurname(surname), HttpStatus.OK);
+    @GetMapping("/api/users/search1/{surname}")
+    public ResponseEntity<List<User>> getAllBySurname(@PathVariable("surname") String surname){
+        List<User> userList = userService.findAllBySurname(surname);
+        List<UserDto> userDtos = new ArrayList<UserDto>();
+        for(User user : userList)
+        {
+            UserDto userDto = new UserDto(user);
+            userDtos.add(userDto);
+        }
+        if(userList.size() == 0)
+            return new ResponseEntity(userDtos, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(userDtos, HttpStatus.OK);
     }
 
     @GetMapping("/api/users/search2/{username}")
-    public List<User> getAllByUsername(@PathVariable("username") String username){
+    public ResponseEntity<List<UserDto>> getAllByUsername(@PathVariable("username") String username){
         List<User> userList = userService.findAllByUsername(username);
-        return userList;
+        List<UserDto> userDtos = new ArrayList<UserDto>();
+        for(User user : userList)
+        {
+            UserDto userDto = new UserDto(user);
+            userDtos.add(userDto);
+        }
+        if(userList.size() == 0)
+            return new ResponseEntity(userDtos, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(userDtos, HttpStatus.OK);
     }
 
     @PostMapping("/api/save-user")

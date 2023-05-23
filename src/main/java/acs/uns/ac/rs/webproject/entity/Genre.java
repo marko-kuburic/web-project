@@ -19,6 +19,10 @@ public class Genre implements Serializable {
     public Genre() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public Genre(String genre) {
         this.genre = genre;
     }

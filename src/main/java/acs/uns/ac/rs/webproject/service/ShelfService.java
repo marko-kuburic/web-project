@@ -80,7 +80,7 @@ public class ShelfService {
     {
         for(ShelfItem shelfItem: shelf.getItems())
         {
-            if(shelfItem.getBook() == book)
+            if(shelfItem.getBook().getId() == book.getId())
                 return true;
         }
         return false;
@@ -111,27 +111,42 @@ public class ShelfService {
         return shelf.addItem(item);
     }
 
+    public boolean addShelfItem(ShelfItem shelfItem, Shelf shelf)
+    {
+        return shelf.addItem(shelfItem);
+    }
+
     public boolean removeBook(Book book, Shelf shelf)
     {
-       if(!isOnShelf(book,shelf))
-           return false;
+      if(!isOnShelf(book,shelf)) {
+          return false;
+      }
+
 
         for(ShelfItem shelfItem: shelf.getItems())
         {
-            if(shelfItem.getBook() == book)
-                return shelf.removeItem(shelfItem);
+
+            if(shelfItem.getBook().getId() == book.getId()) {
+
+                 shelf.removeItem(shelfItem);
+                 save(shelf);
+                 return true;
+            }
 
         }
         return false;
     }
 
-    public void removeBookFromEverywhere(Book book)
+    public boolean removeBookFromEverywhere(Book book)
     {
+        boolean success = true;
+        if(shelfRepository.findAll()==null)
+            return false;
         for(Shelf shelf : shelfRepository.findAll())
         {
-            removeBook(book,shelf);
+            success = removeBook(book,shelf);
         }
-
+        return success;
     }
 
 

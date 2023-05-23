@@ -1,5 +1,6 @@
 package acs.uns.ac.rs.webproject.dto;
 
+import acs.uns.ac.rs.webproject.entity.Review;
 import acs.uns.ac.rs.webproject.entity.ShelfItem;
 import acs.uns.ac.rs.webproject.entity.User;
 
@@ -23,6 +24,13 @@ public class ReviewDto {
         this.rating = rating;
         this.text = text;
         this.date = date;
+    }
+
+    public ReviewDto(Review review)
+    {
+        this.rating = review.getRating();
+        this.text = review.getText();
+        this.userId = review.getUser().getId();
     }
 
     public Long getId() {

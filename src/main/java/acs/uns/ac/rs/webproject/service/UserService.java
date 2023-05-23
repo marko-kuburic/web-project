@@ -108,7 +108,9 @@ public class UserService {
         {
             if(shelf.getId() == shelfId)
             {
-                return shelves.remove(shelf);
+                 shelves.remove(shelf);
+                 userRepository.save(user);
+                 return true;
             }
         }
         return false;

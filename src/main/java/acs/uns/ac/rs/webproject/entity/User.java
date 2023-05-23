@@ -121,6 +121,7 @@ public class User implements Serializable {
 
     public User(UserDto uD)
     {
+        this.id = uD.getUserId();
         this.name = uD.getName();
         this.surname = uD.getSurname();
         this.birthDate = uD.getBirthday();
@@ -224,4 +225,6 @@ public class User implements Serializable {
                 ", role=" + role +
                 '}';
     }
+
+
 }

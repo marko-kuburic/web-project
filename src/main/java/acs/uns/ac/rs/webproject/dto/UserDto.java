@@ -1,5 +1,7 @@
 package acs.uns.ac.rs.webproject.dto;
 
+import acs.uns.ac.rs.webproject.entity.User;
+
 import java.time.LocalDate;
 
 public class UserDto {
@@ -9,6 +11,7 @@ public class UserDto {
 
     private String surname;
 
+    private String username;
     private String image;
 
     private String aboutMe;
@@ -30,6 +33,39 @@ public class UserDto {
         this.birthday = birthday;
         this.mail = mail;
         this.pass = pass;
+    }
+
+    public UserDto(User user)
+    {
+        this.username = user.getUsername();
+        this.userId = user.getId();
+        this.name = user.getName();
+        this.surname = user.getSurname();
+        this.image = user.getImage();
+        this.aboutMe = user.getBio();
+        this.birthday = user.getBirthDate();
+        this.mail = user.getMail();
+        this.pass = user.getPassword();
+    }
+
+    public UserDto(long userId, String name, String surname, String username, String image, String aboutMe, LocalDate birthday, String mail, String pass) {
+        this.userId = userId;
+        this.name = name;
+        this.surname = surname;
+        this.username = username;
+        this.image = image;
+        this.aboutMe = aboutMe;
+        this.birthday = birthday;
+        this.mail = mail;
+        this.pass = pass;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public UserDto(String name, String surname, String image, String aboutMe, LocalDate birthday) {

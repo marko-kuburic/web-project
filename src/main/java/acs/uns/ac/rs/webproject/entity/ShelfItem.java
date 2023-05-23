@@ -1,5 +1,6 @@
 package acs.uns.ac.rs.webproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ public class ShelfItem implements Serializable {
     private Long id;
 
     @ManyToMany(mappedBy = "items")
+    //@JsonIgnoreProperties("shelf")
     private Set<Shelf> shelves = new HashSet<Shelf>();
 
     @OneToOne

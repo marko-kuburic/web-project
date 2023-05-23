@@ -1,6 +1,8 @@
 package acs.uns.ac.rs.webproject.service;
 
+import acs.uns.ac.rs.webproject.dto.Review2Dto;
 import acs.uns.ac.rs.webproject.dto.ReviewDto;
+import acs.uns.ac.rs.webproject.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import acs.uns.ac.rs.webproject.entity.Review;
@@ -24,7 +26,7 @@ public class ReviewService {
         return null;
     }
 
-    public Review changeReview(Review review, ReviewDto reviewDto)
+    public Review changeReview(Review review, Review2Dto reviewDto)
     {
         review.setDate(reviewDto.getDate());
         review.setText(review.getText());
@@ -32,7 +34,7 @@ public class ReviewService {
         return review;
     }
     public List<Review> findAllByBookTitle(String title){return reviewRepository.findAllByBookTitle(title);}
-    public List<Review> findAllByUser(String user){return reviewRepository.findAllByUser(user);}
+    public List<Review> findAllByUser(User user){return reviewRepository.findAllByUser(user);}
 
     public List<Review> findAll(){ return reviewRepository.findAll();}
 

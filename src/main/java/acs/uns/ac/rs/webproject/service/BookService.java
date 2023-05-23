@@ -14,6 +14,9 @@ public class BookService {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private GenreService genreService;
+
 
     public Book findOne(Long id)
     {
@@ -48,8 +51,9 @@ public class BookService {
             book.setTitle(bookDto.getName());
         if(bookDto.getRating() > 0 && bookDto.getRating() <6)
             book.setRating(bookDto.getRating());
-        if(bookDto.getGenre() != null)
-            book.setGenre(bookDto.getGenre());
+        if(bookDto.getGenreId() != null){
+            if(genreService.findOne(bookDto.getGenreId())!=null)
+            book.setGenre(genreService.findOne(bookDto.getGenreId()));}
         if(bookDto.getNumberOfPages() != 0)
             book.setNumberOfPages(bookDto.getNumberOfPages());
         if(bookDto.getISBN() != null)
@@ -57,6 +61,7 @@ public class BookService {
         if(bookDto.getISBN() != null)
             book.setIsbn(bookDto.getISBN());
 
+        save(book);
 
     }
 }

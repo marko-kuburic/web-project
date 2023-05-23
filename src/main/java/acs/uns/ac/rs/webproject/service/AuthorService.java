@@ -1,5 +1,6 @@
 package acs.uns.ac.rs.webproject.service;
 
+import acs.uns.ac.rs.webproject.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import acs.uns.ac.rs.webproject.entity.Author;
@@ -22,6 +23,8 @@ public class AuthorService {
 
         return null;
     }
+
+
 
     public List<Author> findAllByName(String name){return authorRepository.findAllByName(name);}
 

@@ -1,6 +1,7 @@
 package acs.uns.ac.rs.webproject.entity;
 
 import acs.uns.ac.rs.webproject.dto.BookDto;
+import acs.uns.ac.rs.webproject.service.AuthorService;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -45,9 +46,10 @@ public class Book implements Serializable{
 
     private String genreName;
 
-
     public Book() {
     }
+
+
 
     public Book(String title, String imgPath, String isbn, LocalDate releaseDate, int numberOfPages, String description, Genre genre, float rating, ShelfItem item) {
         this.title = title;
@@ -75,6 +77,17 @@ public class Book implements Serializable{
     }
 
     public Book(BookDto bookDto) {
+
+        this.id = bookDto.getId();
+        this.title = bookDto.getTitle();
+        this.imgPath = bookDto.getImagePath();
+        this.isbn = bookDto.getISBN();
+        this.releaseDate = bookDto.getReleaseDate();
+        this.numberOfPages = bookDto.getNumberOfPages();
+        this.description = bookDto.getAbout();
+        this.rating = bookDto.getRating();
+        this.genre = null;
+
 
     }
 

@@ -9,4 +9,5 @@ public interface ShelfItemRepository extends JpaRepository <ShelfItem, Long> {
 
     List<ShelfItem> findAllByTitle(String title);
 
+
 }

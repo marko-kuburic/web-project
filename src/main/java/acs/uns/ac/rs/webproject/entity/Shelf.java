@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "shelf")
 public class Shelf implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -97,7 +98,11 @@ public class Shelf implements Serializable {
     @Override
     public String toString() {
         return "Shelf{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", isPrimary=" + isPrimary +
+                ", user=" + user +
+                ", items=" + items +
                 '}';
     }
 }

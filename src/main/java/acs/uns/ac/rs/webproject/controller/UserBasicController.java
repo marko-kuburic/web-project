@@ -66,7 +66,7 @@ public class UserBasicController {
             return "redirect:/login-form";
 
         session.setAttribute("user", employee);
-        return "redirect:/home";
+        return "profile.html";
     }
 
     @GetMapping("/register-form")
@@ -109,23 +109,6 @@ public class UserBasicController {
         ActivationDto activationDto = new ActivationDto();
         model.addAttribute("activation", activationDto);
         return "activation.html";
-    }
-
-  /*  @PostMapping("/add-shelf-form")  //nez sta ce mi ovo stvarno
-    public String addShelf(Model model){
-        AddShelfDto addShelfDto = new AddShelfDto();
-        model.addAttribute("shelf", addShelfDto);
-        return "register.html"; //treba videt ovo**********************************
-    }*/
-
-    @PutMapping("/update-rofile")
-    public String updateProfile(UserDto userDto)
-    {
-        if(userDto.getMail()!=null || userDto.getPass()!=null)
-            return "redirecet:/update-profile-form";
-
-        userService.updateUser(userDto);
-        return "success";
     }
 
     @PostMapping("/update-profile-form")

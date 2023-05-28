@@ -222,6 +222,7 @@ public class  BookController {
     {
         if(authorService.findOne(bookDto.getAuthorId())==null)
             return new ResponseEntity("No author with that id", HttpStatus.NOT_FOUND);
+            
         if(authorService.findOne(bookDto.getAuthorId()).isActive()!=true)
             return new ResponseEntity("Is not acitve", HttpStatus.FORBIDDEN);
 

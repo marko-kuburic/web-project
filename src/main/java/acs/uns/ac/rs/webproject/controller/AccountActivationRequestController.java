@@ -3,9 +3,14 @@ package acs.uns.ac.rs.webproject.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import acs.uns.ac.rs.webproject.entity.AccountActivationRequest;
+import acs.uns.ac.rs.webproject.entity.Role;
+import acs.uns.ac.rs.webproject.entity.User;
 import acs.uns.ac.rs.webproject.service.AccountActivationRequestService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -46,9 +51,18 @@ public class  AccountActivationRequestController {
     }
 
     @PutMapping("api/update-accountActivationRequest")
-    public String updateAccountActivationRequest(@RequestBody AccountActivationRequest accountActivationRequest) {
+    public ResponseEntity<String> updateAccountActivationRequest(@RequestBody AccountActivationRequest accountActivationRequest, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("user");
+
+        if(loggedUser == null)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
+        if(loggedUser.getRole() != Role.ADMIN)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
         this.accountActivationRequestService.save(accountActivationRequest);
-        return "Successfully saved an accountActivationRequest!";
+        
+        return new ResponseEntity("Successfully updated an accountActivationRequest!", HttpStatus.OK);
     }
 
 }

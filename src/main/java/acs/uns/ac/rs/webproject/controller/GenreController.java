@@ -4,10 +4,14 @@ package acs.uns.ac.rs.webproject.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import acs.uns.ac.rs.webproject.entity.Genre;
+import acs.uns.ac.rs.webproject.entity.Role;
+import acs.uns.ac.rs.webproject.entity.User;
 import acs.uns.ac.rs.webproject.service.GenreService;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -42,9 +46,18 @@ public class  GenreController {
     }
 
     @PostMapping("/api/save-genre")
-    public String saveGenre(@RequestBody Genre genre) {
+    public ResponseEntity<String> saveGenre(@RequestBody Genre genre, HttpSession session) {
+
+        User loggedUser = (User) session.getAttribute("user");
+
+        if(loggedUser == null)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
+        if(loggedUser.getRole() != Role.ADMIN)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
         this.genreService.save(genre);
-        return "Successfully saved a genre!";
+        return new ResponseEntity<String>("Successfully saved a genre!", HttpStatus.OK);
     }
 
 }

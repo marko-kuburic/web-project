@@ -2,6 +2,7 @@ package acs.uns.ac.rs.webproject.controller;
 
 
 
+import acs.uns.ac.rs.webproject.dto.ActivationDto;
 import acs.uns.ac.rs.webproject.dto.BookDto;
 import acs.uns.ac.rs.webproject.dto.UserDto;
 import acs.uns.ac.rs.webproject.entity.*;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import acs.uns.ac.rs.webproject.dto.LoginDto;
+import acs.uns.ac.rs.webproject.dto.RegisterDto;
 import acs.uns.ac.rs.webproject.repository.AccountActivationRequestRepository;
 import acs.uns.ac.rs.webproject.repository.UserRepository;
 import acs.uns.ac.rs.webproject.service.AccountActivationRequestService;
@@ -115,7 +117,7 @@ public class  UserController {
         return "Successfully saved an user!";
     }
 
-    @PostMapping("api/logout")
+    @PostMapping("/api/logout")
     public ResponseEntity Logout(HttpSession session){
         User loggedUser = (User) session.getAttribute("user");
 
@@ -126,9 +128,8 @@ public class  UserController {
         return new ResponseEntity("Successfully logged out", HttpStatus.OK);
     }
 
-    @PostMapping("api/login")
+    @PostMapping("/api/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session){
-        // proverimo da li su podaci validni
         if(loginDto.getUsername().isEmpty() || loginDto.getPassword().isEmpty())
             return new ResponseEntity("Invalid login data", HttpStatus.BAD_REQUEST);
 
@@ -140,8 +141,53 @@ public class  UserController {
         return ResponseEntity.ok("Successfully logged in!");
     }
 
+    @PostMapping("/api/register")
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
+        if(registerDto.getUsername().isEmpty() || registerDto.getPassword().isEmpty() || registerDto.getEmail().isEmpty() || registerDto.getName().isEmpty() || registerDto.getSurname().isEmpty())
+            return new ResponseEntity("You didn't enter all necessary data", HttpStatus.BAD_REQUEST);
+
+        if(!userService.userCheck(registerDto.getUsername(), registerDto.getEmail()))
+            return new ResponseEntity("User with that username or email already exists", HttpStatus.BAD_REQUEST);
+
+        if(!registerDto.getPassword2().equals(registerDto.getPassword()))
+            return new ResponseEntity("Password doesn't match", HttpStatus.BAD_REQUEST);
+
+        User user = new User(registerDto);
+
+        Shelf wantToRead = this.shelfService.createShelf("Want to Read", true);
+        user.addShelf(wantToRead);
+        this.shelfService.save(wantToRead);
+        Shelf current = this.shelfService.createShelf("Currently reading", true);
+        user.addShelf(current);
+        this.shelfService.save(current);
+        Shelf read = this.shelfService.createShelf("Read", true);
+        user.addShelf(read);
+        this.shelfService.save(read);
+
+        this.userService.save(user);
+
+        return new ResponseEntity("You sucessfully registered", HttpStatus.OK);
+    }
+
+    @PostMapping("/api/author-request")
+    public ResponseEntity<String> activation(@RequestBody ActivationDto activationDto){
+        if(activationDto.getMail().isEmpty() || activationDto.getPhoneNumber().isEmpty() || activationDto.getUsername().isEmpty() || activationDto.getPassword().isEmpty() || activationDto.getName().isEmpty() || activationDto.getSurname().isEmpty())
+            return new ResponseEntity("You didn't enter all necessary data", HttpStatus.BAD_REQUEST);
+
+        if(!userService.userCheck(activationDto.getUsername(), activationDto.getMail()))
+            return new ResponseEntity("User with that username or email already exists", HttpStatus.BAD_REQUEST);
+
+        if(!activationDto.getPassword2().equals(activationDto.getPassword()))
+            return new ResponseEntity("Password doesn't match", HttpStatus.BAD_REQUEST);
+        
+        AccountActivationRequest request = new AccountActivationRequest(activationDto);
+
+        this.activationService.save(request);
+        return new ResponseEntity("You sucessfully apllied for author profile", HttpStatus.OK);
+    }
+
     @PutMapping("/api/approve/{id}")
-    public ResponseEntity approve(@PathVariable(name = "id") Long id, HttpSession session){
+    public ResponseEntity<String> approve(@PathVariable(name = "id") Long id, HttpSession session){
         User loggedUser = (User) session.getAttribute("user");
 
         if(loggedUser == null)
@@ -168,6 +214,8 @@ public class  UserController {
 
         acc.setStatus(Status.APPROVED);
 
+        activationService.sendMail(acc, Status.APPROVED);
+
         this.activationService.save(acc);
 
 
@@ -175,7 +223,7 @@ public class  UserController {
     }
 
     @PutMapping("/api/reject/{id}")
-    public ResponseEntity reject(@PathVariable(name = "id") Long id, HttpSession session){
+    public ResponseEntity<String> reject(@PathVariable(name = "id") Long id, HttpSession session){
         User loggedUser = (User) session.getAttribute("user");
 
         if(loggedUser == null)
@@ -188,8 +236,27 @@ public class  UserController {
 
         acc.setStatus(Status.REJECTED);
 
+        activationService.sendMail(acc, Status.REJECTED);
+
         this.activationService.save(acc);
 
         return new ResponseEntity("Successfully rejected", HttpStatus.OK);
     }
+
+    @PutMapping("/api/update-profile")
+    public ResponseEntity<String> updateProfile(@RequestBody UserDto userDto, HttpSession session)
+    {
+        User loggedUser = (User) session.getAttribute("user");
+
+        if(loggedUser == null)
+            return new ResponseEntity("You are not logged in", HttpStatus.FORBIDDEN);
+
+
+        userService.updateUser(userDto);
+
+        return new ResponseEntity("You have successfully updated profile", HttpStatus.OK);
+    }
+
+
+
 }

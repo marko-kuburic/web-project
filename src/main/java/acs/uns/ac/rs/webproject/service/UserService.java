@@ -92,24 +92,32 @@ public class UserService {
         if(shelf==null)
             return false;
 
-        if(shelfservice.findByName(shelf.getName())!=null)
+        if(shelfservice.findByName(shelf.getName())!=null) {
+            System.out.print("1232124");
             return false;
-
+        }
         user.addShelf(shelf);
+        save(user);
         return true;
 
     }
 
+    public boolean containShelf(User user,Shelf shelf)
+    {
+        return user.getShelves().contains(shelf);
+    }
     public boolean deleteShelf(long shelfId, long userId)
     {
         User user = getById(userId);
         Set<Shelf> shelves = user.getShelves();
+
         for(Shelf shelf : shelves)
         {
             if(shelf.getId() == shelfId)
             {
-                 shelves.remove(shelf);
+                user.deleteShelf(shelf);
                  userRepository.save(user);
+
                  return true;
             }
         }

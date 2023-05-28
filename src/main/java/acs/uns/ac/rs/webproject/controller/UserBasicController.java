@@ -118,6 +118,8 @@ public class UserBasicController {
         return "pass.html"; //treba videt ovo**********************************
     }
 
+
+
     @PostMapping("/author-request")
     public String activation(@ModelAttribute ActivationDto activationDto){
         if(activationDto.getMail().isEmpty() || activationDto.getPhoneNumber().isEmpty() || activationDto.getUsername().isEmpty() || activationDto.getPassword().isEmpty() || activationDto.getName().isEmpty() || activationDto.getSurname().isEmpty())

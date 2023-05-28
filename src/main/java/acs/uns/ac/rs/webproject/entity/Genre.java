@@ -1,5 +1,6 @@
 package acs.uns.ac.rs.webproject.entity;
 
+import acs.uns.ac.rs.webproject.dto.GenreDto;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -17,6 +18,10 @@ public class Genre implements Serializable {
     private Set<Book> books = new HashSet<>();
 
     public Genre() {
+    }
+
+    public Genre(GenreDto g) {
+        this.genre = g.getGenre();
     }
 
     public Long getId() {

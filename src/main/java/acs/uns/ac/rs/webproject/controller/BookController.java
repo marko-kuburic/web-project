@@ -3,15 +3,14 @@ package acs.uns.ac.rs.webproject.controller;
 
 
 import acs.uns.ac.rs.webproject.dto.*;
-import acs.uns.ac.rs.webproject.entity.Review;
-import acs.uns.ac.rs.webproject.entity.Shelf;
-import acs.uns.ac.rs.webproject.entity.ShelfItem;
+import acs.uns.ac.rs.webproject.entity.*;
 import acs.uns.ac.rs.webproject.service.*;
+import io.micrometer.observation.GlobalObservationConvention;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import acs.uns.ac.rs.webproject.entity.Book;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +31,9 @@ public class  BookController {
 
     @Autowired
     private AuthorService authorService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private GenreService genreService;
@@ -111,8 +113,12 @@ public class  BookController {
     }
 
     @PostMapping("/add-review")
-    public ResponseEntity addReview(@ModelAttribute Review2Dto reviewDto)
+    public ResponseEntity addReview(@RequestBody Review2Dto reviewDto, HttpSession session)
     {
+        User loggedUser = (User) session.getAttribute("user");
+        if(loggedUser == null)
+            return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
+
         if(reviewDto.getDate() == null)
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
 
@@ -132,8 +138,11 @@ public class  BookController {
     }
 
     @PutMapping("/change-review")
-    public ResponseEntity putReview(@ModelAttribute Review2Dto reviewDto)
+    public ResponseEntity putReview(@RequestBody Review2Dto reviewDto, HttpSession session)
     {
+        User loggedUser = (User) session.getAttribute("user");
+        if(loggedUser == null)
+            return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
         if(reviewDto.getDate() == null)
             return new ResponseEntity("Date wrong", HttpStatus.NOT_FOUND);
 
@@ -152,14 +161,20 @@ public class  BookController {
     }
 
     @DeleteMapping("/remove-book/{shelfItemId}/{shelfId}")
-    public ResponseEntity removeBook(@PathVariable(name = "shelfItemId") Long shelfItemId, @PathVariable(name="shelfId") Long shelfId ){
-
+    public ResponseEntity removeBook(@PathVariable(name = "shelfItemId") Long shelfItemId, @PathVariable(name="shelfId") Long shelfId, HttpSession session ){
+        User loggedUser = (User) session.getAttribute("user");
+        if(loggedUser == null)
+            return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
+        Long userId = loggedUser.getId();
         ShelfItem shelfItem = shelfItemService.findOne(shelfItemId);
         Shelf shelf = shelfService.findOne(shelfId);
         if(shelf==null)
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
 
         if(shelfItem==null)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
+        if(!loggedUser.getShelves().contains(shelf))
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
 
         Book book = shelfItem.getBook();
@@ -183,7 +198,11 @@ public class  BookController {
     }
 
     @PutMapping("/put-shelfItem/{shelfItemID}/{shelfID}")
-    public ResponseEntity putBook(@PathVariable(name = "shelfItemId") Long shelfItemId, @PathVariable(name="shelfId") Long shelfId){
+    public ResponseEntity putBook(@PathVariable(name = "shelfItemId") Long shelfItemId, @PathVariable(name="shelfId") Long shelfId, HttpSession session){
+        User loggedUser = (User) session.getAttribute("user");
+        if(loggedUser == null)
+            return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
+        Long userId = loggedUser.getId();
 
         if(shelfItemService.findOne(shelfItemId)==null)
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
@@ -193,8 +212,11 @@ public class  BookController {
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
         }
 
+
         ShelfItem shelfItem = shelfItemService.findOne(shelfItemId);
         Shelf shelf = shelfService.findOne(shelfId);
+        if(!userService.containShelf(loggedUser,shelf))
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
 
         if(!shelf.getPrimary())
         {
@@ -217,29 +239,38 @@ public class  BookController {
     }
 
     @PostMapping("/add-book")
-    public ResponseEntity addBook(BookDto bookDto)
-    {
-        if(authorService.findOne(bookDto.getAuthorId())==null)
-            return new ResponseEntity("No author with that id", HttpStatus.NOT_FOUND);
-            
-        if(authorService.findOne(bookDto.getAuthorId()).isActive()!=true)
-            return new ResponseEntity("Is not acitve", HttpStatus.FORBIDDEN);
+    public ResponseEntity addBook(@RequestBody BookDto bookDto, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("user");
+        if (loggedUser == null)
+            return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
+        if (loggedUser.getRole() != Role.ADMIN) {
+            if (loggedUser.getRole() != Role.AUTHOR)
+                return new ResponseEntity("Have to be an author!", HttpStatus.FORBIDDEN);
+            Long userId = loggedUser.getId();
 
-        Book book = new Book(bookDto);
-        if(bookDto.getGenreId()!=null && genreService.findOne(bookDto.getGenreId())!=null)
-        book.setGenre(genreService.findOne(bookDto.getGenreId()));
+            if (authorService.findOne(loggedUser.getId()).isActive() == false)
+                return new ResponseEntity("Is not acitve", HttpStatus.FORBIDDEN);
+        }
+            Book book = new Book(bookDto);
+            if (bookDto.getGenreId() != null && genreService.findOne(bookDto.getGenreId()) != null)
+                book.setGenre(genreService.findOne(bookDto.getGenreId()));
 
-        bookService.save(book);
-        return new ResponseEntity("Success", HttpStatus.OK);
+            bookService.save(book);
+            return new ResponseEntity("Success", HttpStatus.OK);
+
     }
     @PutMapping("/change-book")
-    public ResponseEntity updateBook(BookDto bookDto)
+    public ResponseEntity updateBook(@RequestBody BookDto bookDto, HttpSession session)
     {
-        if(authorService.findOne(bookDto.getAuthorId())==null)
-            return new ResponseEntity("No author with that id", HttpStatus.NOT_FOUND);
-       /* if(authorService.findOne(bookDto.getAuthorId()).isActive()!=true)
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);*/
+        User loggedUser = (User) session.getAttribute("user");
+        if(loggedUser == null)
+            return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
+        if (loggedUser.getRole() != Role.ADMIN) {
+            if (loggedUser.getRole() != Role.AUTHOR)
+                return new ResponseEntity("Have to be an author!", HttpStatus.FORBIDDEN);
+            Long userId = loggedUser.getId();
 
+        }
         if(bookService.findOne(bookDto.getId())==null)
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
 

@@ -7,6 +7,7 @@ import acs.uns.ac.rs.webproject.dto.BookDto;
 import acs.uns.ac.rs.webproject.dto.DeleteShelfDto;
 import acs.uns.ac.rs.webproject.dto.ShelfDto;
 import acs.uns.ac.rs.webproject.entity.Book;
+import acs.uns.ac.rs.webproject.entity.Role;
 import acs.uns.ac.rs.webproject.entity.User;
 import acs.uns.ac.rs.webproject.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -76,9 +77,17 @@ public class  ShelfController {
         return "Successfully saved a shelf!";
     }
 
-    @PostMapping("/add-shelf/{userId}")
-    public ResponseEntity addShelf(@ModelAttribute AddShelfDto addShelfDto, /*HttpSession session*/@PathVariable("userId") Long userId ){
+    @PostMapping("/add-shelf")
+    public ResponseEntity addShelf(@RequestBody AddShelfDto addShelfDto, HttpSession session){
 
+        User loggedUser = (User) session.getAttribute("user");
+        if(loggedUser == null)
+            return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
+        Long userId = loggedUser.getId();
+
+
+       /* if(loggedUser.getRole() != Role.ADMIN)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);*/
        /*User loggedUser = (User) session.getAttribute("user");
         if(loggedUser == null) {
             return new ResponseEntity("Nema sesije", HttpStatus.FORBIDDEN);
@@ -87,27 +96,33 @@ public class  ShelfController {
             return new ResponseEntity("Emtpy field NAME!", HttpStatus.NO_CONTENT);*/
 
         Shelf shelf = new Shelf(addShelfDto);
+
+        if(!this.userService.addShelf(shelf, userService.getById(userId)))
+            return new ResponseEntity("Failed to add shelf (name already exists)!", HttpStatus.FORBIDDEN);
+
+        this.userService.save(loggedUser);
         this.shelfService.save(shelf);
-        this.userService.addShelf(shelf, userService.getById(userId));
         return new ResponseEntity("Success", HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete-shelf/{id}/{userId}")
-    public ResponseEntity deleteShelf(@PathVariable(name = "id") Long shelfId,/*HttpSession session*/@PathVariable("userId") Long userId){
-        /*User loggedUser = (User) session.getAttribute("user");
+    @DeleteMapping("/delete-shelf/{id}")
+    public ResponseEntity deleteShelf(@PathVariable(name = "id") Long shelfId,HttpSession session){
+        User loggedUser = (User) session.getAttribute("user");
+
         if(loggedUser == null) {
-            return new ResponseEntity("Nema sesije", HttpStatus.FORBIDDEN);
+            return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
         }
         if(!shelfService.exists(shelfId))
         {
-            return new ResponseEntity("Ne postoji takva knjiga", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("No shelf with that id in the database", HttpStatus.NOT_FOUND);
         }
-        if(shelfService.isPrimary(shelfId))
+        /*if(shelfService.isPrimary(shelfId))
         {
             return new ResponseEntity("Cant be deleted, its primary!", HttpStatus.FORBIDDEN);
         }*/
+        Long userId = loggedUser.getId();
         if(userService.deleteShelf(shelfId, userId))
         return new ResponseEntity("Success", HttpStatus.OK);
-        return new ResponseEntity("Fail", HttpStatus.OK);
+        return new ResponseEntity("U got no shelves with that id.", HttpStatus.FORBIDDEN);
     }
 }

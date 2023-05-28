@@ -2,6 +2,9 @@ package acs.uns.ac.rs.webproject.controller;
 
 
 
+import acs.uns.ac.rs.webproject.dto.BookDto;
+import acs.uns.ac.rs.webproject.dto.GenreDto;
+import acs.uns.ac.rs.webproject.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -35,6 +38,25 @@ public class  GenreController {
         if(genre == null)
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         return new ResponseEntity(genre, HttpStatus.OK);
+    }
+
+    @PostMapping("/add-genre")
+    public ResponseEntity addBook(@RequestBody GenreDto genreDto, HttpSession session)
+    {
+        User loggedUser = (User) session.getAttribute("user");
+        if(loggedUser == null)
+            return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
+        if(loggedUser.getRole() != Role.ADMIN)
+            return new ResponseEntity("Have to be an author!", HttpStatus.FORBIDDEN);
+        Long userId = loggedUser.getId();
+
+
+        Genre genre = new Genre(genreDto);
+        if(!genreService.findAllByGenre(genre.getGenre()).isEmpty())
+            return new ResponseEntity("Already exists!", HttpStatus.FORBIDDEN);
+
+        genreService.save(genre);
+        return new ResponseEntity("Success", HttpStatus.OK);
     }
 
     @GetMapping("/api/genres/search/{genre}")

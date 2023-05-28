@@ -80,7 +80,7 @@ public class Book implements Serializable{
 
     public Book(BookDto bookDto) {
 
-        this.id = bookDto.getId();
+
         this.title = bookDto.getTitle();
         this.imgPath = bookDto.getImagePath();
         this.isbn = bookDto.getISBN();

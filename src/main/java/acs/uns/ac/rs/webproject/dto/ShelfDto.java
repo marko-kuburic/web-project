@@ -1,9 +1,13 @@
 package acs.uns.ac.rs.webproject.dto;
 
 import acs.uns.ac.rs.webproject.entity.Shelf;
+import acs.uns.ac.rs.webproject.entity.ShelfItem;
 import acs.uns.ac.rs.webproject.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class ShelfDto {
 
@@ -12,6 +16,8 @@ public class ShelfDto {
     private String name;
     private Boolean isPrimary;
     private User user;
+
+    private Set<ShelfItem> items = new HashSet<ShelfItem>();
 
     public ShelfDto(Long id, String name, Boolean isPrimary) {
         this.id = id;

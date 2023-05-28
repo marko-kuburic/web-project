@@ -2,6 +2,7 @@ package acs.uns.ac.rs.webproject.entity;
 
 import acs.uns.ac.rs.webproject.dto.BookDto;
 import acs.uns.ac.rs.webproject.service.AuthorService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ public class Book implements Serializable{
     private float rating ;
 
     @OneToOne(mappedBy = "book")
+    @JsonIgnore
     private ShelfItem item;
 
     private String genreName;

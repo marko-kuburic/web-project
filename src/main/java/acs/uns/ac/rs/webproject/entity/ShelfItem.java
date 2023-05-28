@@ -1,5 +1,6 @@
 package acs.uns.ac.rs.webproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -15,9 +16,10 @@ public class ShelfItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(mappedBy = "items")
-    //@JsonIgnoreProperties("shelf")
-    private Set<Shelf> shelves = new HashSet<Shelf>();
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "shelf_id")
+    private Shelf shelf;
 
     @OneToOne
     private Review review;
@@ -35,8 +37,8 @@ public class ShelfItem implements Serializable {
         this.book = book;
     }
 
-    public ShelfItem(Set<Shelf> shelves, Review review, Book book) {
-        this.shelves = shelves;
+    public ShelfItem(Shelf shelf, Review review, Book book) {
+        this.shelf = shelf;
         this.review = review;
         this.book = book;
         title = book.getTitle();
@@ -58,9 +60,13 @@ public class ShelfItem implements Serializable {
         this.id = id;
     }
 
-    public Set<Shelf> getShelves() { return shelves; }
+    public Shelf getShelf() {
+        return shelf;
+    }
 
-    public void setShelves(Set<Shelf> shelves) { this.shelves = shelves; }
+    public void setShelf(Shelf shelf) {
+        this.shelf = shelf;
+    }
 
     public Review getReview() {
         return review;

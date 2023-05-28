@@ -24,11 +24,12 @@ public class Shelf implements Serializable {
     @ManyToOne
     private User user;
 
-    @ManyToMany
-    @JoinTable(name = "shelves_and_items",
+
+   /* @JoinTable(name = "shelves_and_items",
             joinColumns = @JoinColumn(name = "shelf_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
-    private Set<ShelfItem> items = new HashSet<ShelfItem>();
+            inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))*/
+    @OneToMany(mappedBy = "shelf", cascade = CascadeType.ALL )
+    private Set<ShelfItem> items = new HashSet<>();
 
     public Shelf() {
     }

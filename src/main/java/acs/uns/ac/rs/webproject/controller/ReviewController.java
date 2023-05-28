@@ -25,54 +25,53 @@ public class  ReviewController {
     private UserService userService;
 
     @GetMapping("/api/reviews")
-    public ResponseEntity<List<ReviewDto>> getReviews(){
+    public ResponseEntity<List<Review>> getReviews(){
         List<Review> reviewList = reviewService.findAll();
         if(reviewList.size()==0)
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-        List<Review2Dto> review2Dtos = new ArrayList<Review2Dto>();
+       /* List<Review2Dto> review2Dtos = new ArrayList<Review2Dto>();
         for(Review review : reviewList)
         {
             Review2Dto reviewDto = new Review2Dto(review);
 
             review2Dtos.add(reviewDto);
-        }
-        return new ResponseEntity(review2Dtos, HttpStatus.OK);
+        }*/
+        return new ResponseEntity(reviewList, HttpStatus.OK);
     }
 
     @GetMapping("/api/reviews/{id}")
-    public ResponseEntity<ReviewDto> getReview(@PathVariable(name = "id") Long id){
+    public ResponseEntity<Review> getReview(@PathVariable(name = "id") Long id){
         Review review = reviewService.findOne(id);
         if(review==null)
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-        ReviewDto reviewDto = new ReviewDto(review);
-        return new ResponseEntity(reviewDto, HttpStatus.OK);
+        return new ResponseEntity(review, HttpStatus.OK);
     }
 
     @GetMapping("/api/reviews/search1/{bookTitle}")
-    public ResponseEntity<List<ReviewDto>> getAllByBookTitle(@PathVariable("bookTitle") String bookTitle){
+    public ResponseEntity<List<Review>> getAllByBookTitle(@PathVariable("bookTitle") String bookTitle){
         List<Review> reviewList = reviewService.findAllByBookTitle(bookTitle);
         if(reviewList.size()==0)
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-        List<ReviewDto> reviewDtos = new ArrayList<ReviewDto>();
+        /*/List<ReviewDto> reviewDtos = new ArrayList<ReviewDto>();
         for(Review review : reviewList)
         {
             ReviewDto reviewDto = new ReviewDto (review);
             reviewDtos.add(reviewDto);
-        }
-        return new ResponseEntity(reviewDtos, HttpStatus.OK);
+        }*/
+        return new ResponseEntity(reviewList, HttpStatus.OK);
     }
     @GetMapping("/api/reviews/search2/{userId}")
-    public ResponseEntity<List<ReviewDto>> getAllByUser(@PathVariable("userId") Long userId){
+    public ResponseEntity<List<Review>> getAllByUser(@PathVariable("userId") Long userId){
         List<Review> reviewList = reviewService.findAllByUser(userService.getById(userId));
         if(reviewList.size()==0)
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-        List<ReviewDto> reviewDtos = new ArrayList<ReviewDto>();
+        /*List<ReviewDto> reviewDtos = new ArrayList<ReviewDto>();
         for(Review review : reviewList)
         {
             ReviewDto reviewDto = new ReviewDto (review);
             reviewDtos.add(reviewDto);
-        }
-        return new ResponseEntity(reviewDtos, HttpStatus.OK);
+        }*/
+        return new ResponseEntity(reviewList, HttpStatus.OK);
     }
 
     @PostMapping("/api/save-review")

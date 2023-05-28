@@ -31,6 +31,7 @@ public class BookDto {
     long authorId;
 
 
+
     public BookDto(Long id, String title, String ISBN, LocalDate releaseDate, Integer numberOfPages, String about, String imagePath, Long genreId, Float rating, Long authorId, long shelfItemId) {
         this.id = id;
 

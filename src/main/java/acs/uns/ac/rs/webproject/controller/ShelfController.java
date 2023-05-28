@@ -28,46 +28,46 @@ public class  ShelfController {
     @Autowired
     private UserService userService;
     @GetMapping("/api/shelves")
-    public ResponseEntity<List<ShelfDto>> getShelves(){
+    public ResponseEntity<List<Shelf>> getShelves(){
         List<Shelf> shelfList = shelfService.findAll();
-        List<ShelfDto> shelfDtos = new ArrayList<ShelfDto>();
+        //List<ShelfDto> shelfDtos = new ArrayList<ShelfDto>();
         if(shelfList.size() == 0)
-            return new ResponseEntity(shelfDtos, HttpStatus.NOT_FOUND);
+            return new ResponseEntity(shelfList, HttpStatus.NOT_FOUND);
 
-        for(Shelf shelf : shelfList)
+        /*for(Shelf shelf : shelfList)
         {
             ShelfDto shelfDto = new ShelfDto (shelf);
             shelfDtos.add(shelfDto);
-        }
+        }*/
 
-        return new ResponseEntity(shelfDtos, HttpStatus.OK);
+        return new ResponseEntity(shelfList, HttpStatus.OK);
     }
 
     @GetMapping("/api/shelves/{id}")
-    public ResponseEntity<ShelfDto> getShelf(@PathVariable(name = "id") Long id){
+    public ResponseEntity<Shelf> getShelf(@PathVariable(name = "id") Long id){
         Shelf shelf = shelfService.findOne(id);
         if(shelf == null)
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-        ShelfDto shelfDto = new ShelfDto(shelf);
+       // ShelfDto shelfDto = new ShelfDto(shelf);
 
-        return new ResponseEntity(shelfDto, HttpStatus.OK);
+        return new ResponseEntity(shelf, HttpStatus.OK);
     }
 
     @GetMapping("/api/shelves/search/{name}")
-    public ResponseEntity<List<ShelfDto>> getAllByName(@PathVariable("name") String name){
+    public ResponseEntity<List<Shelf>> getAllByName(@PathVariable("name") String name){
         List<Shelf> shelfList = shelfService.findAllByName(name);
         if(shelfList.size()==0)
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-        List<ShelfDto> shelfDtos = new ArrayList<ShelfDto>();
+       /* List<ShelfDto> shelfDtos = new ArrayList<ShelfDto>();
 
 
         for(Shelf shelf : shelfList)
         {
             ShelfDto shelfDto = new ShelfDto(shelf);
             shelfDtos.add(shelfDto);
-        }
+        }*/
 
-        return new ResponseEntity(shelfDtos, HttpStatus.OK);
+        return new ResponseEntity(shelfList, HttpStatus.OK);
     }
 
     @PostMapping("/api/save-shelf")

@@ -23,45 +23,45 @@ public class  ShelfItemController {
     private ShelfItemService shelfItemService;
 
     @GetMapping("/api/shelfItems")
-    public ResponseEntity<List<ShelfItemDto>> getShelfItems(){
+    public ResponseEntity<List<ShelfItem>> getShelfItems(){
         List<ShelfItem> shelfItemList = shelfItemService.findAll();
-        List<ShelfItemDto> shelfItemDtos = new ArrayList<ShelfItemDto>();
+        //List<ShelfItemDto> shelfItemDtos = new ArrayList<ShelfItemDto>();
         if(shelfItemList.size() == 0)
-            return new ResponseEntity(shelfItemDtos, HttpStatus.NOT_FOUND);
-        for(ShelfItem shelfItem : shelfItemList)
+            return new ResponseEntity(shelfItemList, HttpStatus.NOT_FOUND);
+       /* for(ShelfItem shelfItem : shelfItemList)
         {
             if(shelfItem!=null) {
                 ShelfItemDto shelfItemDto = new ShelfItemDto(shelfItem);
                 shelfItemDtos.add(shelfItemDto);
             }
         }
-
-        return new ResponseEntity(shelfItemDtos, HttpStatus.OK);
+*/
+        return new ResponseEntity(shelfItemList, HttpStatus.OK);
     }
 
     @GetMapping("/api/shelfItems/{id}")
-    public ResponseEntity<ShelfItemDto> getShelfItem(@PathVariable(name = "id") Long id){
+    public ResponseEntity<ShelfItem> getShelfItem(@PathVariable(name = "id") Long id){
         ShelfItem shelfItem = shelfItemService.findOne(id);
         if(shelfItem == null)
             return new ResponseEntity(shelfItem, HttpStatus.NOT_FOUND);
-        ShelfItemDto shelfItemDto = new ShelfItemDto(shelfItem);
+        //ShelfItemDto shelfItemDto = new ShelfItemDto(shelfItem);
 
-        return new ResponseEntity(shelfItemDto, HttpStatus.OK);
+        return new ResponseEntity(shelfItem, HttpStatus.OK);
     }
 
     @GetMapping("/api/shelfItems/search/{title}")
-    public ResponseEntity<List<ShelfItemDto>> getAllByName(@PathVariable("title") String title){
+    public ResponseEntity<List<ShelfItem>> getAllByName(@PathVariable("title") String title){
         List<ShelfItem> shelfItemList = shelfItemService.findAllByTitle(title);
-        List<ShelfItemDto> shelfItemDtos = new ArrayList<ShelfItemDto>();
+        //List<ShelfItemDto> shelfItemDtos = new ArrayList<ShelfItemDto>();
         if(shelfItemList.size()==0)
-            return new ResponseEntity(shelfItemDtos, HttpStatus.NOT_FOUND);
-        for(ShelfItem shelfItem : shelfItemList)
+            return new ResponseEntity(shelfItemList, HttpStatus.NOT_FOUND);
+       /* for(ShelfItem shelfItem : shelfItemList)
         {
             ShelfItemDto shelfItemDto = new ShelfItemDto(shelfItem);
             shelfItemDtos.add(shelfItemDto);
         }
-
-        return new ResponseEntity(shelfItemDtos, HttpStatus.OK);
+*/
+        return new ResponseEntity(shelfItemList, HttpStatus.OK);
     }
 
     @PostMapping("/api/save-shelfItem")

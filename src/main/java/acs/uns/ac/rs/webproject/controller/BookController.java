@@ -37,71 +37,70 @@ public class  BookController {
     private GenreService genreService;
 
     @GetMapping("/api/books")
-    public ResponseEntity<List<BookDto>> getBooks() {
+    public ResponseEntity<List<Book>> getBooks() {
         List<Book> bookList = bookService.findAll();
-        List<BookDto> bookDtos = new ArrayList<BookDto>();
+        /*List<BookDto> bookDtos = new ArrayList<BookDto>();
         for(Book book : bookList)
         {
             BookDto bookDto = new BookDto (book);
             bookDtos.add(bookDto);
-        }
+        }*/
         if(bookList.size() == 0)
-            return new ResponseEntity(bookDtos, HttpStatus.NOT_FOUND);
-        return new ResponseEntity(bookDtos, HttpStatus.OK);
+            return new ResponseEntity(bookList, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(bookList, HttpStatus.OK);
     }
 
     @GetMapping("/api/book/{id}")
-    public ResponseEntity<BookDto> getBook(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<Book> getBook(@PathVariable(name = "id") Long id) {
 
         Book book = bookService.findOne(id);
         if(book == null)
             return ResponseEntity.ofNullable(null);
-        BookDto bookDto = new BookDto(book);
 
-        return ResponseEntity.ok(bookDto);
+        return ResponseEntity.ok(book);
     }
 
     @GetMapping("/api/books/search1/{name}")
     public ResponseEntity<List<Book>> getAllByName(@PathVariable("name") String name) {
         List<Book> bookList = bookService.findAllByName(name);
-        List<BookDto> bookDtos = new ArrayList<BookDto>();
+        /*List<BookDto> bookDtos = new ArrayList<BookDto>();
         for(Book book : bookList)
         {
             BookDto bookDto = new BookDto (book);
             bookDtos.add(bookDto);
-        }
+        }*/
         if(bookList.size()==0)
-            return new ResponseEntity(bookDtos, HttpStatus.NOT_FOUND);
-        return new ResponseEntity(bookDtos, HttpStatus.OK);
+            return new ResponseEntity(bookList, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(bookList, HttpStatus.OK);
     }
 
     @GetMapping("/api/books/search2/{isbn}")
-    public ResponseEntity<List<BookDto>> getAllByIsbn(@PathVariable("isbn") String isbn) {
+    public ResponseEntity<List<Book>> getAllByIsbn(@PathVariable("isbn") String isbn) {
         List<Book> bookList = this.bookService.findAllByIsbn(isbn);
-        List<BookDto> bookDtos = new ArrayList<BookDto>();
+       /* List<BookDto> bookDtos = new ArrayList<BookDto>();
         for(Book book : bookList)
         {
             BookDto bookDto = new BookDto (book);
             bookDtos.add(bookDto);
-        }
+        }*/
         if(bookList.isEmpty())
-            return new ResponseEntity(bookDtos, HttpStatus.NOT_FOUND);
-        return new ResponseEntity(bookDtos, HttpStatus.OK);
+            return new ResponseEntity(bookList, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(bookList, HttpStatus.OK);
     }
 
     @GetMapping("/api/books/search3/{genreName}")
-    public ResponseEntity<List<BookDto>> getAllByGenreName(@PathVariable("genreName") String genreName) {
+    public ResponseEntity<List<Book>> getAllByGenreName(@PathVariable("genreName") String genreName) {
         List<Book> bookList = bookService.findAllByGenreName(genreName);
-        List<BookDto> bookDtos = new ArrayList<BookDto>();
+        /*List<BookDto> bookDtos = new ArrayList<BookDto>();
         for(Book book : bookList)
         {
             BookDto bookDto = new BookDto (book);
             bookDtos.add(bookDto);
         }
-
+*/
         if(bookList.isEmpty())
-            return new ResponseEntity(bookDtos, HttpStatus.NOT_FOUND);
-        return new ResponseEntity(bookDtos, HttpStatus.OK);
+            return new ResponseEntity(bookList, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(bookList, HttpStatus.OK);
     }
 
 

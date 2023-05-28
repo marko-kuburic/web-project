@@ -2,6 +2,7 @@ package acs.uns.ac.rs.webproject.entity;
 
 import acs.uns.ac.rs.webproject.dto.Review2Dto;
 import acs.uns.ac.rs.webproject.dto.ReviewDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -22,9 +23,11 @@ public class Review implements Serializable {
     private LocalDate date;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @OneToOne
+    @JsonIgnore
     private ShelfItem item;
 
     private String bookTitle;

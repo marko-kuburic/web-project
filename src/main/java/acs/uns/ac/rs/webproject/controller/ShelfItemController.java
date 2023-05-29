@@ -2,10 +2,13 @@ package acs.uns.ac.rs.webproject.controller;
 
 
 
+import acs.uns.ac.rs.webproject.dto.Review2Dto;
 import acs.uns.ac.rs.webproject.dto.ShelfDto;
 import acs.uns.ac.rs.webproject.dto.ShelfItemDto;
+import acs.uns.ac.rs.webproject.entity.Review;
 import acs.uns.ac.rs.webproject.entity.Shelf;
 import acs.uns.ac.rs.webproject.entity.User;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,8 @@ import java.util.List;
 public class  ShelfItemController {
     @Autowired
     private ShelfItemService shelfItemService;
+
+
 
     @GetMapping("/api/shelfItems")
     public ResponseEntity<List<ShelfItem>> getShelfItems(){

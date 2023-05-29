@@ -197,23 +197,23 @@ public class  BookController {
         return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
     }
 
-    @PutMapping("/put-shelfItem/{shelfItemID}/{shelfID}")
-    public ResponseEntity putBook(@PathVariable(name = "shelfItemId") Long shelfItemId, @PathVariable(name="shelfId") Long shelfId, HttpSession session){
+    @PutMapping("/put-book/{bookId}/{shelfId}")
+    public ResponseEntity putBook(@PathVariable(name = "bookId") Long bookId, @PathVariable(name="shelfId") Long shelfId, HttpSession session){
         User loggedUser = (User) session.getAttribute("user");
         if(loggedUser == null)
             return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
         Long userId = loggedUser.getId();
 
-        if(shelfItemService.findOne(shelfItemId)==null)
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+        if(bookService.findOne(bookId)==null)
+            return new ResponseEntity("Book not found", HttpStatus.NOT_FOUND);
 
         if(!shelfService.exists(shelfId))
         {
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity("Shelf not found", HttpStatus.NOT_FOUND);
         }
 
-
-        ShelfItem shelfItem = shelfItemService.findOne(shelfItemId);
+        Book book = bookService.findOne(bookId);
+        ShelfItem shelfItem = new ShelfItem(null, book);
         Shelf shelf = shelfService.findOne(shelfId);
         if(!userService.containShelf(loggedUser,shelf))
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
@@ -227,6 +227,7 @@ public class  BookController {
             else
             {
                 shelfService.addShelfItem(shelfItem, shelf);
+                shelfService.save(shelf);
             }
         }
         else {
@@ -248,7 +249,7 @@ public class  BookController {
                 return new ResponseEntity("Have to be an author!", HttpStatus.FORBIDDEN);
             Long userId = loggedUser.getId();
 
-            if (authorService.findOne(loggedUser.getId()).isActive() == false)
+            if (!authorService.findOne(loggedUser.getId()).isActive())
                 return new ResponseEntity("Is not acitve", HttpStatus.FORBIDDEN);
         }
             Book book = new Book(bookDto);

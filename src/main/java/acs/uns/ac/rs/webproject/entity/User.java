@@ -205,7 +205,6 @@ public class User implements Serializable {
     public void addShelf(Shelf shelf)
     {
         this.shelves.add(shelf);
-        System.out.print("neafj");
     }
 
     public boolean deleteShelf(Shelf shelf)

@@ -104,6 +104,8 @@ public class UserService {
 
     public boolean containShelf(User user,Shelf shelf)
     {
+        if(user.getShelves()==null)
+            return false;
         return user.getShelves().contains(shelf);
     }
     public boolean deleteShelf(long shelfId, long userId)

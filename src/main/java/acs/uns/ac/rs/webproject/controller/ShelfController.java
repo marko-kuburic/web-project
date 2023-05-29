@@ -96,12 +96,18 @@ public class  ShelfController {
             return new ResponseEntity("Emtpy field NAME!", HttpStatus.NO_CONTENT);*/
 
         Shelf shelf = new Shelf(addShelfDto);
+        this.shelfService.save(shelf);
+        shelf = shelfService.findByName(addShelfDto.getName());
 
         if(!this.userService.addShelf(shelf, userService.getById(userId)))
             return new ResponseEntity("Failed to add shelf (name already exists)!", HttpStatus.FORBIDDEN);
 
-        this.userService.save(loggedUser);
+
+        shelf.setUser(loggedUser);
+
+
         this.shelfService.save(shelf);
+       this.userService.save(loggedUser);
         return new ResponseEntity("Success", HttpStatus.OK);
     }
 
@@ -121,8 +127,15 @@ public class  ShelfController {
             return new ResponseEntity("Cant be deleted, its primary!", HttpStatus.FORBIDDEN);
         }*/
         Long userId = loggedUser.getId();
-        if(userService.deleteShelf(shelfId, userId))
-        return new ResponseEntity("Success", HttpStatus.OK);
+        if(userService.deleteShelf(shelfId, userId)){
+
+            User u = userService.getById(userId);
+            System.out.print(u.getShelves());
+            userService.save(u);
+
+            return new ResponseEntity("Success", HttpStatus.OK);
+        }
+
         return new ResponseEntity("U got no shelves with that id.", HttpStatus.FORBIDDEN);
     }
 }

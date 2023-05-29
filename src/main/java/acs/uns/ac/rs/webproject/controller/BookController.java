@@ -168,6 +168,7 @@ public class  BookController {
         Long userId = loggedUser.getId();
         ShelfItem shelfItem = shelfItemService.findOne(shelfItemId);
         Shelf shelf = shelfService.findOne(shelfId);
+
         if(shelf==null)
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
 
@@ -204,6 +205,7 @@ public class  BookController {
             return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
         Long userId = loggedUser.getId();
 
+
         if(bookService.findOne(bookId)==null)
             return new ResponseEntity("Book not found", HttpStatus.NOT_FOUND);
 
@@ -215,14 +217,20 @@ public class  BookController {
         Book book = bookService.findOne(bookId);
         ShelfItem shelfItem = new ShelfItem(null, book);
         Shelf shelf = shelfService.findOne(shelfId);
-        if(!userService.containShelf(loggedUser,shelf))
+        System.out.print(shelf.getUser());
+        System.out.print(loggedUser);
+        if(shelf.getUser()==null)
+        {
+            return new ResponseEntity("null", HttpStatus.FORBIDDEN);
+        }
+        if(shelf.getUser().getId()!=loggedUser.getId())
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
 
         if(!shelf.getPrimary())
         {
             if(!shelfService.isOnPrimary(shelfItem.getBook()))
             {
-                return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+                return new ResponseEntity("Not on primary", HttpStatus.FORBIDDEN);
             }
             else
             {
@@ -253,6 +261,8 @@ public class  BookController {
                 return new ResponseEntity("Is not acitve", HttpStatus.FORBIDDEN);
         }
             Book book = new Book(bookDto);
+            System.out.print(book);
+        System.out.print(bookDto);
             if (bookDto.getGenreId() != null && genreService.findOne(bookDto.getGenreId()) != null)
                 book.setGenre(genreService.findOne(bookDto.getGenreId()));
 
@@ -273,10 +283,11 @@ public class  BookController {
 
         }
         if(bookService.findOne(bookDto.getId())==null)
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity("No book with that id", HttpStatus.NOT_FOUND);
 
         Book book = bookService.findOne(bookDto.getId());
         bookService.updateBook(book,bookDto);
+        bookService.save(book);
         return new ResponseEntity("Success", HttpStatus.OK);
     }
 

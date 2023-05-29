@@ -1,6 +1,7 @@
 package acs.uns.ac.rs.webproject.entity;
 
 import acs.uns.ac.rs.webproject.dto.AddShelfDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
@@ -21,7 +22,8 @@ public class Shelf implements Serializable {
     @Column(name = "is_primary")
     private Boolean isPrimary;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private User user;
 
 
@@ -51,7 +53,13 @@ public class Shelf implements Serializable {
         this.items = items;
     }
 
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getId() {
         return id;

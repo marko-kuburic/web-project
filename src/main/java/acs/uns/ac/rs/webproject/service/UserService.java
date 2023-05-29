@@ -93,11 +93,15 @@ public class UserService {
             return false;
 
         if(shelfservice.findByName(shelf.getName())!=null) {
-            System.out.print("1232124");
+
+            if(shelfservice.findOne(shelf.getId())==null)
             return false;
         }
-        user.addShelf(shelf);
+        user = user.addShelf(shelf);
         save(user);
+        //System.out.print(shelf.getUser());
+       shelfservice.save(shelf);
+
         return true;
 
     }
@@ -117,7 +121,9 @@ public class UserService {
         {
             if(shelf.getId() == shelfId)
             {
-                user.deleteShelf(shelf);
+               // System.out.print(user.getShelves());
+                user = user.deleteShelf(shelf);
+               // System.out.print(user.getShelves());
                  userRepository.save(user);
 
                  return true;

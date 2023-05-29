@@ -187,5 +187,20 @@ public class BookDto {
         this.id = id;
     }
 
-
+    @Override
+    public String toString() {
+        return "BookDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", ISBN='" + ISBN + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", numberOfPages=" + numberOfPages +
+                ", about='" + about + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", genreId=" + genreId +
+                ", rating=" + rating +
+                ", authorId=" + authorId +
+                ", shelfItemId=" + shelfItemId +
+                '}';
+    }
 }

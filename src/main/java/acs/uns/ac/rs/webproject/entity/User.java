@@ -1,6 +1,7 @@
 package acs.uns.ac.rs.webproject.entity;
 
 import acs.uns.ac.rs.webproject.dto.UserDto;
+import acs.uns.ac.rs.webproject.repository.UserRepository;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import acs.uns.ac.rs.webproject.dto.RegisterDto;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity(name = "userr")
 @DiscriminatorColumn(name="user_author", discriminatorType = DiscriminatorType.INTEGER)
@@ -42,13 +44,10 @@ public class User implements Serializable {
 
     @Column
     private String bio;
-
-
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Shelf> shelves = new HashSet<>();
 
     public User() {
@@ -202,29 +201,37 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public void addShelf(Shelf shelf)
+    public User addShelf(Shelf shelf)
     {
+        //System.out.print(shelves);
+        shelf.setUser(this);
         this.shelves.add(shelf);
+
+
+        //System.out.print(shelves);
+        return this;
     }
 
-    public boolean deleteShelf(Shelf shelf)
+    public User deleteShelf(Shelf shelf)
     {
-        return this.shelves.remove(shelf);
+        this.shelves.remove(shelf);
+        return this;
     }
-
 
     @Override
     public String toString() {
         return "User{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", username='" + username + '\'' +
                 ", mail='" + mail + '\'' +
                 ", password='" + password + '\'' +
-                ", birthDate=" + birthDate + '\'' +
+                ", birthDate=" + birthDate +
                 ", role=" + role +
+                ", image='" + image + '\'' +
+                ", bio='" + bio + '\'' +
+
                 '}';
     }
-
-
 }

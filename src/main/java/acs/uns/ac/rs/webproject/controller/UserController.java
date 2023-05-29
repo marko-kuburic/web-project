@@ -254,8 +254,31 @@ public class  UserController {
         if(loggedUser == null)
             return new ResponseEntity("You are not logged in", HttpStatus.FORBIDDEN);
 
+        if(userDto.getName() != null)
+            loggedUser.setName(userDto.getName());
+        if(userDto.getSurname() != null)
+            loggedUser.setSurname(userDto.getSurname());
+        if(userDto.getImage() != null)
+            loggedUser.setImage(userDto.getImage());
+        if(userDto.getAboutMe() != null)
+            loggedUser.setBio(userDto.getAboutMe());
+        if(userDto.getBirthday() != null)
+            loggedUser.setBirthDate(userDto.getBirthday());
 
-        userService.updateUser(userDto);
+        if(userDto.getMail() != null || userDto.getPass() != null){
+            User secondLogin = userService.login(loggedUser.getUsername(), userDto.getPassCheck());
+        
+            if (secondLogin == null)
+                return new ResponseEntity<>("Password is incorrect!", HttpStatus.NOT_FOUND);
+
+            if(userDto.getMail() != null)
+                loggedUser.setMail(userDto.getMail());
+
+            if(userDto.getPass() != null)
+                loggedUser.setPassword(userDto.getPass());
+        }
+        
+        userService.save(loggedUser);
 
         return new ResponseEntity("You have successfully updated profile", HttpStatus.OK);
     }

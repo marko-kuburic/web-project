@@ -78,7 +78,7 @@ public class  ShelfController {
     }
 
     @PostMapping("/add-shelf")
-    public ResponseEntity addShelf(@RequestBody AddShelfDto addShelfDto, HttpSession session){
+    public ResponseEntity<String> addShelf(@RequestBody AddShelfDto addShelfDto, HttpSession session){
 
         User loggedUser = (User) session.getAttribute("user");
         if(loggedUser == null)

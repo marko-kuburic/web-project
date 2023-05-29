@@ -29,7 +29,7 @@ public class ReviewService {
     public Review changeReview(Review review, Review2Dto reviewDto)
     {
         review.setDate(reviewDto.getDate());
-        review.setText(review.getText());
+        review.setText(reviewDto.getText());
         review.setRating(reviewDto.getRating());
         return review;
     }

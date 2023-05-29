@@ -156,12 +156,15 @@ public class  UserController {
 
         Shelf wantToRead = this.shelfService.createShelf("Want to Read", true);
         user.addShelf(wantToRead);
+        wantToRead.setUser(user);
         this.shelfService.save(wantToRead);
         Shelf current = this.shelfService.createShelf("Currently reading", true);
         user.addShelf(current);
+        current.setUser(user);
         this.shelfService.save(current);
         Shelf read = this.shelfService.createShelf("Read", true);
         user.addShelf(read);
+        read.setUser(user);
         this.shelfService.save(read);
 
         this.userService.save(user);

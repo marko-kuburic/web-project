@@ -45,6 +45,7 @@ public class BookService {
 
     public void updateBook(Book book, BookDto bookDto)
     {
+        System.out.print(bookDto);
         if(bookDto.getISBN() != null)
             book.setIsbn(bookDto.getISBN());
         if(bookDto.getName() != null)
@@ -56,8 +57,8 @@ public class BookService {
             book.setGenre(genreService.findOne(bookDto.getGenreId()));}
         if(bookDto.getNumberOfPages() != 0)
             book.setNumberOfPages(bookDto.getNumberOfPages());
-        if(bookDto.getISBN() != null)
-            book.setIsbn(bookDto.getISBN());
+        if(bookDto.getAbout() != null)
+            book.setDescription(bookDto.getAbout());
         if(bookDto.getISBN() != null)
             book.setIsbn(bookDto.getISBN());
 

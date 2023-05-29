@@ -4,12 +4,15 @@ import acs.uns.ac.rs.webproject.dto.AddShelfDto;
 import jakarta.persistence.*;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "shelf")
+@JsonInclude(JsonInclude.Include.ALWAYS)
 public class Shelf implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -22,6 +22,8 @@ public class UserDto {
 
     private String pass;
 
+    private String passCheck;
+
     public UserDto() {
     }
 
@@ -58,6 +60,21 @@ public class UserDto {
         this.birthday = birthday;
         this.mail = mail;
         this.pass = pass;
+    }
+
+    
+
+    public UserDto(String name, String surname, String username, String image, String aboutMe, LocalDate birthday,
+            String mail, String pass, String passCheck) {
+        this.name = name;
+        this.surname = surname;
+        this.username = username;
+        this.image = image;
+        this.aboutMe = aboutMe;
+        this.birthday = birthday;
+        this.mail = mail;
+        this.pass = pass;
+        this.passCheck = passCheck;
     }
 
     public String getUsername() {
@@ -139,4 +156,14 @@ public class UserDto {
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
+
+    public String getPassCheck() {
+        return passCheck;
+    }
+
+    public void setPassCheck(String passCheck) {
+        this.passCheck = passCheck;
+    }
+
+    
 }

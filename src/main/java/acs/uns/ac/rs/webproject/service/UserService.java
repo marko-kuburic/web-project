@@ -1,13 +1,17 @@
 package acs.uns.ac.rs.webproject.service;
 
+import acs.uns.ac.rs.webproject.dto.RegisterDto;
 import acs.uns.ac.rs.webproject.dto.UserDto;
+import acs.uns.ac.rs.webproject.entity.Book;
 import acs.uns.ac.rs.webproject.entity.Shelf;
+import acs.uns.ac.rs.webproject.entity.ShelfItem;
 import acs.uns.ac.rs.webproject.repository.ShelfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import acs.uns.ac.rs.webproject.entity.User;
 import acs.uns.ac.rs.webproject.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -58,6 +62,26 @@ public class UserService {
 
     }
 
+    public User register(RegisterDto registerDto){
+        User user = new User(registerDto);
+        save(user);
+
+        Shelf wantToRead = this.shelfservice.createShelf("Want to Read", true);
+        wantToRead.setUser(user);
+        this.shelfservice.save(wantToRead);
+        user.addShelf(wantToRead);
+        Shelf current = this.shelfservice.createShelf("Currently reading", true);
+        current.setUser(user);
+        this.shelfservice.save(current);
+        user.addShelf(current);
+        Shelf read = this.shelfservice.createShelf("Read", true);
+        read.setUser(user);
+        this.shelfservice.save(read);
+        user.addShelf(read);
+
+        return save(user);
+    }
+
     public boolean userCheck(String username, String email) {
 
         User user1 = userRepository.getByUsername(username);
@@ -94,7 +118,7 @@ public class UserService {
 
         if(shelfservice.findByName(shelf.getName())!=null) {
 
-            if(shelfservice.findOne(shelf.getId())==null)
+            //if(shelfservice.findOne(shelf.getId())==null)
             return false;
         }
         user = user.addShelf(shelf);
@@ -106,27 +130,32 @@ public class UserService {
 
     }
 
-    public boolean containShelf(User user,Shelf shelf)
+    public boolean containShelf(User user, Shelf shelf)
     {
-        if(user.getShelves()==null)
+        if(user.getShelves() == null)
             return false;
-        return user.getShelves().contains(shelf);
+
+        for(Shelf sh : user.getShelves())
+            if(sh.getId() == shelf.getId())
+                return true;
+        
+        return false;
     }
-    public boolean deleteShelf(long shelfId, long userId)
+    public boolean deleteShelf(Shelf shelf, User user)
     {
-        User user = getById(userId);
         Set<Shelf> shelves = user.getShelves();
 
-        for(Shelf shelf : shelves)
+        for(Shelf sh : shelves)
         {
-            if(shelf.getId() == shelfId)
+            if(sh.getId() == shelf.getId())
             {
-               // System.out.print(user.getShelves());
-                user = user.deleteShelf(shelf);
-               // System.out.print(user.getShelves());
-                 userRepository.save(user);
+                sh.setUser(null);
+                //System.out.print(user.getShelves());
+                user.deleteShelf(sh);
+                //System.out.print(user.getShelves());
+                userRepository.save(user);
 
-                 return true;
+                return true;
             }
         }
         return false;
@@ -156,5 +185,17 @@ public class UserService {
             userRepository.findById(userDto.getUserId()).setName(userDto.getName());
     }
 
+    public List<Book> findAllBooksByName(User user, String name)
+    {
+        Set<Shelf> shelves = user.getShelves();
+        List<Book> found = new ArrayList();
+
+        for(Shelf sh : shelves)
+            for(ShelfItem si : sh.getItems())
+                if(si.getBook().getTitle().contains(name))
+                    found.add(si.getBook());
+
+        return found;
+    }
 
 }

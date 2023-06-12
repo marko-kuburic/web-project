@@ -11,6 +11,7 @@ import acs.uns.ac.rs.webproject.repository.ShelfRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ShelfService {
@@ -35,10 +36,6 @@ public class ShelfService {
     public List<Shelf> findAll(){ return shelfRepository.findAll();}
 
     public boolean save(Shelf shelf){
-
-        if(existsShelfName(shelf.getName()))
-            return false;
-
         shelfRepository.save(shelf);
         return true;
     }
@@ -85,13 +82,15 @@ public class ShelfService {
         }
         return false;
     }
-    public boolean isOnPrimary(Book book)
+    public boolean isOnPrimary(Book book, User user)
     {
-        Shelf read = findByName("Read");
-        Shelf wantToRead = findByName("Want to Read");
-        Shelf currentlyReading = findByName("Currently read");
+        Set<Shelf> list = user.getShelves();
+        for(Shelf sh : list)
+            if(sh.getPrimary())
+                if(isOnShelf(book, sh))
+                    return true;
 
-        return isOnShelf(book, read) || isOnShelf(book, wantToRead) || isOnShelf(book, currentlyReading);
+        return false;
 
     }
     public boolean isPrimary(long shelfId)
@@ -137,16 +136,20 @@ public class ShelfService {
         return false;
     }
 
-    public boolean removeBookFromEverywhere(Book book)
+    public boolean removeBookFromEverywhere(ShelfItem si, User user)
     {
-        boolean success = true;
-        if(shelfRepository.findAll()==null)
+
+
+        if(user.getShelves() == null)
             return false;
-        for(Shelf shelf : shelfRepository.findAll())
+            
+        for(Shelf shelf : user.getShelves())
         {
-            success = removeBook(book,shelf);
+            si.setShelf(null);
+            shelf.removeItem(si);
+            save(shelf);
         }
-        return success;
+        return true;
     }
 
 

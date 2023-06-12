@@ -25,18 +25,18 @@ public class  ReviewController {
     private UserService userService;
 
     @GetMapping("/api/reviews")
-    public ResponseEntity<List<Review>> getReviews(){
+    public ResponseEntity<List<ReviewDto>> getReviews(){
         List<Review> reviewList = reviewService.findAll();
         if(reviewList.size()==0)
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-       /* List<Review2Dto> review2Dtos = new ArrayList<Review2Dto>();
+        List<ReviewDto> review2Dtos = new ArrayList<ReviewDto>();
         for(Review review : reviewList)
         {
-            Review2Dto reviewDto = new Review2Dto(review);
+            ReviewDto reviewDto = new ReviewDto(review);
 
             review2Dtos.add(reviewDto);
-        }*/
-        return new ResponseEntity(reviewList, HttpStatus.OK);
+        }
+        return new ResponseEntity(review2Dtos, HttpStatus.OK);
     }
 
     @GetMapping("/api/reviews/{id}")

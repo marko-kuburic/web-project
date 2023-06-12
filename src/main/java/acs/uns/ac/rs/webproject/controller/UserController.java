@@ -152,22 +152,6 @@ public class  UserController {
         if(!registerDto.getPassword2().equals(registerDto.getPassword()))
             return new ResponseEntity("Password doesn't match", HttpStatus.BAD_REQUEST);
 
-        User user = new User(registerDto);
-
-        Shelf wantToRead = this.shelfService.createShelf("Want to Read", true);
-        user.addShelf(wantToRead);
-        wantToRead.setUser(user);
-        this.shelfService.save(wantToRead);
-        Shelf current = this.shelfService.createShelf("Currently reading", true);
-        user.addShelf(current);
-        current.setUser(user);
-        this.shelfService.save(current);
-        Shelf read = this.shelfService.createShelf("Read", true);
-        user.addShelf(read);
-        read.setUser(user);
-        this.shelfService.save(read);
-
-        this.userService.save(user);
 
         return new ResponseEntity("You sucessfully registered", HttpStatus.OK);
     }
@@ -220,7 +204,6 @@ public class  UserController {
         activationService.sendMail(acc, Status.APPROVED);
 
         this.activationService.save(acc);
-
 
         return new ResponseEntity("Successfully aprooved", HttpStatus.OK);
     }
@@ -283,6 +266,21 @@ public class  UserController {
         return new ResponseEntity("You have successfully updated profile", HttpStatus.OK);
     }
 
+    @GetMapping("/api/user/books/search1/{name}")
+    public ResponseEntity<List<Book>> getAllByName(@PathVariable("name") String name, HttpSession session) {
 
+        User loggedUser = (User) session.getAttribute("user");
+
+        List<Book> bookList = userService.findAllBooksByName(loggedUser, name);
+        /*List<BookDto> bookDtos = new ArrayList<BookDto>();
+        for(Book book : bookList)
+        {
+            BookDto bookDto = new BookDto (book);
+            bookDtos.add(bookDto);
+        }*/
+        if(bookList.size()==0)
+            return new ResponseEntity(bookList, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(bookList, HttpStatus.OK);
+    }
 
 }

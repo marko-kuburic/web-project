@@ -3,9 +3,13 @@ package acs.uns.ac.rs.webproject.service;
 import acs.uns.ac.rs.webproject.dto.BookDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import acs.uns.ac.rs.webproject.entity.Author;
 import acs.uns.ac.rs.webproject.entity.Book;
+import acs.uns.ac.rs.webproject.repository.AuthorRepository;
 import acs.uns.ac.rs.webproject.repository.BookRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +20,8 @@ public class BookService {
     private BookRepository bookRepository;
     @Autowired
     private GenreService genreService;
+    @Autowired
+    private AuthorService authorService;
 
 
     public Book findOne(Long id)
@@ -35,8 +41,42 @@ public class BookService {
         return false;
     }
 
-    public List<Book> findAllByName(String title){return bookRepository.findAllByTitle(title);}
-    public List<Book> findAllByIsbn(String isbn){return bookRepository.findAllByIsbn(isbn);}
+    public List<Book> findAllByName(String title)
+    {
+        List<Book> list = bookRepository.findAll();
+
+        for(Book b : list)
+            if(!b.getTitle().contains(title))
+                list.remove(b);
+
+        return list;
+    }
+
+    public List<Book> findAllByIsbn(String isbn)
+    {
+        List<Book> list = bookRepository.findAll();
+
+        for(Book b : list)
+            if(!b.getIsbn().contains(isbn))
+                list.remove(b);
+
+        return list;
+    
+    }
+
+    public List<Book> findAllByAuthor(String author)
+    {
+        List<Author> authors = authorService.findAll();
+
+        List<Book> list = new ArrayList();
+
+        for(Author a : authors)
+            if(a.getName().contains(author))
+                list.addAll(a.getBookSet());
+
+        return list;
+    }
+
     public List<Book> findAllByGenreName(String genre){return bookRepository.findAllByTitle(genre);}
 
     public List<Book> findAll(){ return bookRepository.findAll();}

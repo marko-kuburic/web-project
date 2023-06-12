@@ -44,10 +44,11 @@ public class User implements Serializable {
 
     @Column
     private String bio;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Shelf> shelves = new HashSet<>();
 
     public User() {
@@ -204,7 +205,7 @@ public class User implements Serializable {
     public User addShelf(Shelf shelf)
     {
         //System.out.print(shelves);
-        shelf.setUser(this);
+        //shelf.setUser(this);
         this.shelves.add(shelf);
 
 
@@ -214,8 +215,20 @@ public class User implements Serializable {
 
     public User deleteShelf(Shelf shelf)
     {
+        for(Shelf sh : shelves)
+            if(sh.getId() == shelf.getId())
+                sh.setUser(null);
         this.shelves.remove(shelf);
         return this;
+    }
+
+    public boolean haveShelf(Long id)
+    {
+        for(Shelf sh : shelves)
+            if(sh.getId() == id)
+                return true;
+        
+        return false;
     }
 
     @Override

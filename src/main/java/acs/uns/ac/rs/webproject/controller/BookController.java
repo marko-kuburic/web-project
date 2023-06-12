@@ -105,6 +105,21 @@ public class  BookController {
         return new ResponseEntity(bookList, HttpStatus.OK);
     }
 
+    @GetMapping("/api/books/search/{author}")
+    public ResponseEntity<List<Book>> getAllByAuthor(@PathVariable("author") String author) {
+        List<Book> bookList = bookService.findAllByAuthor(author);
+        /*List<BookDto> bookDtos = new ArrayList<BookDto>();
+        for(Book book : bookList)
+        {
+            BookDto bookDto = new BookDto (book);
+            bookDtos.add(bookDto);
+        }
+*/
+        if(bookList.isEmpty())
+            return new ResponseEntity(bookList, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(bookList, HttpStatus.OK);
+    }
+
 
     @PostMapping("/api/save-book")
     public String saveBook(@RequestBody Book book) {
@@ -162,28 +177,35 @@ public class  BookController {
 
     @DeleteMapping("/remove-book/{shelfItemId}/{shelfId}")
     public ResponseEntity removeBook(@PathVariable(name = "shelfItemId") Long shelfItemId, @PathVariable(name="shelfId") Long shelfId, HttpSession session ){
+        
         User loggedUser = (User) session.getAttribute("user");
+        
         if(loggedUser == null)
             return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
+        
         Long userId = loggedUser.getId();
         ShelfItem shelfItem = shelfItemService.findOne(shelfItemId);
         Shelf shelf = shelfService.findOne(shelfId);
 
         if(shelf==null)
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity("No such shelf", HttpStatus.FORBIDDEN);
 
         if(shelfItem==null)
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+            return new ResponseEntity("No such book", HttpStatus.FORBIDDEN);
+        
+        System.out.println(loggedUser.getShelves());
 
-        if(!loggedUser.getShelves().contains(shelf))
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+        if(!loggedUser.haveShelf(shelfId))
+            return new ResponseEntity("The user does not have that shelf", HttpStatus.FORBIDDEN);
 
         Book book = shelfItem.getBook();
+
         if(shelf.getPrimary())
         {
 
-            if(!shelfService.removeBookFromEverywhere(book))
+            if(!shelfService.removeBookFromEverywhere(shelfItem, loggedUser))
                 return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
             if(shelf.getName().equals("Read"))
             {
                 shelfItem.setReview(null);
@@ -193,53 +215,77 @@ public class  BookController {
             return new ResponseEntity("Successfully removed a book", HttpStatus.OK);
 
         }
+
         if(shelfService.removeBook(book,shelf))
-        return new ResponseEntity("Successfully removed a book", HttpStatus.OK);
+            return new ResponseEntity("Successfully removed a book", HttpStatus.OK);
+
         return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
     }
 
     @PutMapping("/put-book/{bookId}/{shelfId}")
     public ResponseEntity putBook(@PathVariable(name = "bookId") Long bookId, @PathVariable(name="shelfId") Long shelfId, HttpSession session){
+        
         User loggedUser = (User) session.getAttribute("user");
+        
         if(loggedUser == null)
             return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
-        Long userId = loggedUser.getId();
-
-
-        if(bookService.findOne(bookId)==null)
-            return new ResponseEntity("Book not found", HttpStatus.NOT_FOUND);
-
-        if(!shelfService.exists(shelfId))
-        {
-            return new ResponseEntity("Shelf not found", HttpStatus.NOT_FOUND);
-        }
+        
+        //Long userId = loggedUser.getId();
 
         Book book = bookService.findOne(bookId);
-        ShelfItem shelfItem = new ShelfItem(null, book);
         Shelf shelf = shelfService.findOne(shelfId);
-        System.out.print(shelf.getUser());
-        System.out.print(loggedUser);
+
+        if(book==null)
+            return new ResponseEntity("Book not found", HttpStatus.NOT_FOUND);
+
+        if(shelf == null)
+            return new ResponseEntity("Shelf not found", HttpStatus.NOT_FOUND);
+
+        if(!userService.containShelf(loggedUser, shelf))
+            return new ResponseEntity("Shelf not found on this users account", HttpStatus.NOT_FOUND);
+
+        ShelfItem shelfItem = new ShelfItem(null, book);
+        /*
         if(shelf.getUser()==null)
         {
-            return new ResponseEntity("null", HttpStatus.FORBIDDEN);
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
         }
         if(shelf.getUser().getId()!=loggedUser.getId())
             return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
-
+        */
+        
         if(!shelf.getPrimary())
         {
-            if(!shelfService.isOnPrimary(shelfItem.getBook()))
+            if(!shelfService.isOnPrimary(shelfItem.getBook(), loggedUser))
             {
-                return new ResponseEntity("Not on primary", HttpStatus.FORBIDDEN);
+                return new ResponseEntity("Not on a primary shelf", HttpStatus.FORBIDDEN);
             }
             else
             {
-                shelfService.addShelfItem(shelfItem, shelf);
+                if(shelfService.isOnShelf(book, shelf))
+                    return new ResponseEntity("It's already on that shelf", HttpStatus.FORBIDDEN);
+                this.shelfService.addShelfItem(shelfItem, shelf);
                 shelfService.save(shelf);
             }
         }
         else {
-
+            for(Shelf sh: loggedUser.getShelves())
+                if(sh.getPrimary())
+                    for(ShelfItem si : sh.getItems())
+                        if(si.getBook().getId() == shelfItem.getBook().getId()){
+                            shelfService.removeBook(si.getBook(), sh);
+                            //this.shelfService.save(sh);
+                        }
+                        else
+                            System.out.println("ALOOO");
+            loggedUser.deleteShelf(shelf);
+            shelf.setUser(loggedUser);
+            shelfItem.setShelf(shelf);
+            shelf.addItem(shelfItem);
+            this.shelfService.save(shelf);
+            loggedUser.addShelf(shelf);
+            System.out.println("ALO");
+            //this.userService.save(loggedUser);
             if(shelf.getName().equals("Read"))
                 return new ResponseEntity("redirect:/add-review", HttpStatus.OK);
 

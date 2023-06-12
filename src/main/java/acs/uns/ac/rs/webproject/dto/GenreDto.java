@@ -2,7 +2,9 @@ package acs.uns.ac.rs.webproject.dto;
 
 public class GenreDto {
 
-    String genre;
+    private String genre;
+
+    public GenreDto(){}
 
     public GenreDto(String genre) {
         this.genre = genre;

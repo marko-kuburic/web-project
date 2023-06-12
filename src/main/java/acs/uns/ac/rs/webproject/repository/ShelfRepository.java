@@ -12,4 +12,6 @@ public interface ShelfRepository extends JpaRepository <Shelf, Long> {
 
     Shelf getByName(String name);
 
+    Shelf save(Shelf shelf);
+
 }

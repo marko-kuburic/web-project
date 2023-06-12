@@ -47,6 +47,25 @@ public class BookDto {
         this.shelfItemId = shelfItemId;
     }
 
+    
+
+
+
+    public BookDto(String title, String iSBN, LocalDate releaseDate, Integer numberOfPages, String about,
+            String imagePath, Float rating, long authorId, long shelfItemId) {
+        this.title = title;
+        ISBN = iSBN;
+        this.releaseDate = releaseDate;
+        this.numberOfPages = numberOfPages;
+        this.about = about;
+        this.imagePath = imagePath;
+        this.rating = rating;
+        this.authorId = authorId;
+        this.shelfItemId = shelfItemId;
+    }
+
+
+
 
 
     public String getImagePath() {

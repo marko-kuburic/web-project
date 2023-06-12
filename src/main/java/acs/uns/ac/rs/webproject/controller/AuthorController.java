@@ -4,10 +4,17 @@ package acs.uns.ac.rs.webproject.controller;
 
 import acs.uns.ac.rs.webproject.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import acs.uns.ac.rs.webproject.dto.BookDto;
 import acs.uns.ac.rs.webproject.entity.Author;
+import acs.uns.ac.rs.webproject.entity.Book;
+import acs.uns.ac.rs.webproject.entity.Role;
 import acs.uns.ac.rs.webproject.service.AuthorService;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -48,6 +55,25 @@ public class  AuthorController {
     public String saveAuthor(@RequestBody Author author) {
         this.authorService.save(author);
         return "Successfully saved an author!";
+    }
+
+    @PostMapping("/api/author/add-book")
+    public ResponseEntity<String> addBook(@RequestBody BookDto bookDto, HttpSession session) {
+        User loggedUser = (User) session.getAttribute("user");
+
+        if(loggedUser == null)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
+        if(loggedUser.getRole() == Role.READER)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
+        Book book = new Book(bookDto);
+
+        if(authorService.addBook(book, loggedUser))
+            return new ResponseEntity("Successfully added a book", HttpStatus.OK);
+        else
+            return new ResponseEntity("There is no such author", HttpStatus.BAD_REQUEST);
+
     }
 
 

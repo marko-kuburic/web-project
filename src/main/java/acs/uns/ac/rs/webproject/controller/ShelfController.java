@@ -20,6 +20,7 @@ import acs.uns.ac.rs.webproject.service.ShelfService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class  ShelfController {
@@ -29,8 +30,13 @@ public class  ShelfController {
     @Autowired
     private UserService userService;
     @GetMapping("/api/shelves")
-    public ResponseEntity<List<Shelf>> getShelves(){
-        List<Shelf> shelfList = shelfService.findAll();
+    public ResponseEntity<List<Shelf>> getShelves(HttpSession session){
+        User loggedUser = (User) session.getAttribute("user");
+
+        if(loggedUser == null)
+            return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
+        
+        Set<Shelf> shelfList = loggedUser.getShelves();
         //List<ShelfDto> shelfDtos = new ArrayList<ShelfDto>();
         if(shelfList.size() == 0)
             return new ResponseEntity(shelfList, HttpStatus.NOT_FOUND);
@@ -127,7 +133,9 @@ public class  ShelfController {
             return new ResponseEntity("Cant be deleted, its primary!", HttpStatus.FORBIDDEN);
         }*/
         Long userId = loggedUser.getId();
-        if(userService.deleteShelf(shelfId, userId)){
+        Shelf shelf = shelfService.findOne(shelfId);
+        
+        if(userService.deleteShelf(shelf, loggedUser)){
 
             User u = userService.getById(userId);
             System.out.print(u.getShelves());

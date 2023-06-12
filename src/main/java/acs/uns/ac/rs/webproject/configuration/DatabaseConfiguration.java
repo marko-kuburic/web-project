@@ -22,9 +22,14 @@ public class DatabaseConfiguration {
     public boolean instantiate(){
         User admin1 = new User("Danilo", "Damjanovic", "chodaliman", "danilodamjanovic@gmail.com", "kadacekrajovojagoniji", LocalDate.of(2002, 12, 11), Role.ADMIN);
         User admin2 = new User("Marko", "Kuburic", "skubi021", "markokuburic@gmail.com", "123456789", LocalDate.of(2002, 8, 21), Role.ADMIN);
+        User author1 = new User("Marko", "Kuburic", "marko1", "marko@gmail.com", "1234", LocalDate.of(2002, 8, 21), Role.AUTHOR);
+
 
         userRepository.save(admin1);
         userRepository.save(admin2);
+        userRepository.save(author1);
+
+
 
         return true;
     }

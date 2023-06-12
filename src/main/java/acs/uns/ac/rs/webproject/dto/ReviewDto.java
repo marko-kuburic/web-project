@@ -31,6 +31,7 @@ public class ReviewDto {
         this.rating = review.getRating();
         this.text = review.getText();
         this.userId = review.getUser().getId();
+        this.bookTitle = review.getItem().getBook().getTitle();
     }
 
     public Long getId() {

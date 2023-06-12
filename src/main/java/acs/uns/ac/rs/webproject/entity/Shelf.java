@@ -13,7 +13,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "shelf")
-@JsonInclude(JsonInclude.Include.ALWAYS)
 public class Shelf implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +32,7 @@ public class Shelf implements Serializable {
    /* @JoinTable(name = "shelves_and_items",
             joinColumns = @JoinColumn(name = "shelf_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))*/
-    @OneToMany(mappedBy = "shelf", cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "shelf", fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     private Set<ShelfItem> items = new HashSet<>();
 
     public Shelf() {

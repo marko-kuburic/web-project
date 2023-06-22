@@ -1,5 +1,6 @@
 package acs.uns.ac.rs.webproject.entity;
 
+import acs.uns.ac.rs.webproject.dto.AuthorDto;
 import acs.uns.ac.rs.webproject.entity.User;
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -31,6 +32,11 @@ public class Author extends User implements Serializable{
     public Author(String name, String surname, String username, String mail, String password, LocalDate birthDate, Role role, Set<Review> reviews, boolean isActive) {
         super(name, surname, username, mail, password, birthDate, role, reviews);
         this.isActive = isActive;
+    }
+
+    public Author(AuthorDto a) {
+        super(a);
+        this.isActive = a.isActive();
     }
 
     public boolean isActive() {

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import acs.uns.ac.rs.webproject.dto.AuthorDto;
 import acs.uns.ac.rs.webproject.dto.BookDto;
 import acs.uns.ac.rs.webproject.entity.Author;
 import acs.uns.ac.rs.webproject.entity.Book;
@@ -52,9 +53,10 @@ public class  AuthorController {
     }
 
     @PostMapping("/api/save-author")
-    public String saveAuthor(@RequestBody Author author) {
+    public ResponseEntity<String> saveAuthor(@RequestBody AuthorDto authorDto) {
+        Author author = new Author(authorDto);
         this.authorService.save(author);
-        return "Successfully saved an author!";
+        return new ResponseEntity("Successfully aded an author", HttpStatus.OK);
     }
 
     @PostMapping("/api/author/add-book")

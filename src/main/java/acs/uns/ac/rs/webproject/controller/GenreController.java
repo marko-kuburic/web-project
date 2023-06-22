@@ -47,7 +47,7 @@ public class  GenreController {
         if(loggedUser == null)
             return new ResponseEntity("Have to be logged in!", HttpStatus.FORBIDDEN);
         if(loggedUser.getRole() != Role.ADMIN)
-            return new ResponseEntity("Have to be an author!", HttpStatus.FORBIDDEN);
+            return new ResponseEntity("Have to be an admin!", HttpStatus.FORBIDDEN);
         Long userId = loggedUser.getId();
 
 

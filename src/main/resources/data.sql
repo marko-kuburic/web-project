@@ -11,8 +11,8 @@ INSERT INTO SHELF_ITEM (book_id,shelf_id) VALUES (2,1);
 
 
 
-INSERT INTO REVIEW (rating, text, date, user_id, item_id) VALUES (5.0, 'ODLICNA KNJIGA!', '2023-5-4', 1 , 1);
-INSERT INTO REVIEW (rating, text, date, user_id, item_id) VALUES (5.0, 'BOMBONA!', '2022-5-4', 1 , 2);
+INSERT INTO REVIEW (id, rating, text, date, user_id, item_id) VALUES (1, 5.0, 'ODLICNA KNJIGA!', '2023-5-4', 1 , 1);
+INSERT INTO REVIEW (id, rating, text, date, user_id, item_id) VALUES (2, 5.0, 'BOMBONA!', '2022-5-4', 1 , 2);
 
 INSERT INTO ACCOUNT_ACTIVATION_REQUEST(mail, phone_number, message, date, status) VALUES ('danilodanilod@gmail.com','0662141125','ajmo liman','2023-5-4',0);
 

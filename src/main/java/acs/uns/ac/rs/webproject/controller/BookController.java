@@ -264,8 +264,11 @@ public class  BookController {
             {
                 if(shelfService.isOnShelf(book, shelf))
                     return new ResponseEntity("It's already on that shelf", HttpStatus.FORBIDDEN);
-                this.shelfService.addShelfItem(shelfItem, shelf);
-                shelfService.save(shelf);
+                shelfItem.setShelf(shelf);
+                this.shelfItemService.save(shelfItem);
+                shelf.addItem(shelfItem);
+                this.shelfService.save(shelf);
+                loggedUser.addShelf(shelf);
             }
         }
         else {

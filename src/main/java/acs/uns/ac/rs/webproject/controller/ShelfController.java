@@ -102,18 +102,18 @@ public class  ShelfController {
             return new ResponseEntity("Emtpy field NAME!", HttpStatus.NO_CONTENT);*/
 
         Shelf shelf = new Shelf(addShelfDto);
-        this.shelfService.save(shelf);
-        shelf = shelfService.findByName(addShelfDto.getName());
+        //shelf = shelfService.findByName(addShelfDto.getName());
 
-        if(!this.userService.addShelf(shelf, userService.getById(userId)))
+        if(loggedUser.getShelves().contains(shelf))
             return new ResponseEntity("Failed to add shelf (name already exists)!", HttpStatus.FORBIDDEN);
 
 
         shelf.setUser(loggedUser);
-
-
         this.shelfService.save(shelf);
-       this.userService.save(loggedUser);
+        loggedUser.addShelf(shelf);
+
+        
+        this.userService.save(loggedUser);
         return new ResponseEntity("Success", HttpStatus.OK);
     }
 

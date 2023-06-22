@@ -152,6 +152,8 @@ public class  UserController {
         if(!registerDto.getPassword2().equals(registerDto.getPassword()))
             return new ResponseEntity("Password doesn't match", HttpStatus.BAD_REQUEST);
 
+        userService.register(registerDto);
+
 
         return new ResponseEntity("You sucessfully registered", HttpStatus.OK);
     }

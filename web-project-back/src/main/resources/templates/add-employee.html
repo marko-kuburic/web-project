@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Employees</title>
+</head>
+<body>
+<button onclick="location.href = '/logout'">Log out</button>
+<form th:action="@{/save-employee}" th:object="${employee}" method="post">
+  <label for="firstName">First name:</label>
+  <input id="firstName" type="text" th:field="*{firstname}"/>
+  <label for="lastName">Last name:</label>
+  <input id="lastName" type="text" th:field="*{lastname}"/>
+  <label for="position">Position:</label>
+  <input id="position" type="text" th:field="*{position}"/>
+  <input type="submit">
+</form>
+</body>
+</html>
